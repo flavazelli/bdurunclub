@@ -73,16 +73,7 @@ import { getEvents } from '@/api/events';
 const currentYear = new Date().getFullYear();
 const carousel = ref(null);
 
-const upcomingRuns = ref([
-  { id: 1, name: 'Tuesday Evening Tempo', date: new Date('2025-04-08T18:30:00') },
-  { id: 2, name: 'Saturday Sunrise Jog', date: new Date('2025-04-12T07:00:00') },
-  { id: 3, name: 'Tuesday Evening Endurance', date: new Date('2025-04-15T18:30:00') },
-  { id: 4, name: 'Saturday Social Long Run', date: new Date('2025-04-19T07:00:00') },
-  { id: 5, name: 'Tuesday Night Intervals', date: new Date('2025-04-22T18:30:00') },
-  { id: 6, name: 'Saturday Group Trail', date: new Date('2025-04-26T07:30:00') },
-  { id: 7, name: 'Tuesday Sunset Sprint', date: new Date('2025-04-29T18:30:00') },
-  { id: 8, name: 'Saturday City Explorer', date: new Date('2025-05-03T07:00:00') },
-]);
+const upcomingRuns = ref([]);
 
 const formatDate = (date) => {
   return new Intl.DateTimeFormat('en-US', {
@@ -124,7 +115,6 @@ const fetchUpcomingRuns = async () => {
   }
 };
 
-fetchUpcomingRuns();
 const pauseScrolling = () => {
   paused = true;
 };
