@@ -47,9 +47,13 @@
               Download GPX File
             </a>
           </div>
-  
-          <!-- Register Button -->
-            <div class="mt-8 text-center">
+
+          <div class="w-full h-[500px] rounded-xl shadow-md border border-gray-200">
+            <div ref="mapContainer" class="w-full h-full" />
+          </div>
+
+        <!-- Register Button -->
+          <div class="mt-8 text-center">
             <button
               v-if="!isUserRegistered"
               @click="register"
@@ -64,7 +68,7 @@
             >
               Unregister
             </button>
-            </div>
+          </div>
         </div>
       </section>
   
@@ -80,12 +84,17 @@
 import { ref, onMounted, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { getEvent, registerForEvent, unregisterForEvent, getMyUpcomingEvents} from '@/api/events'; // Assuming you have an API function to fetch event details
+import maplibregl from 'maplibre-gl'
+import * as toGeoJSON from '@tmcw/togeojson'
 
 const router = useRoute();
 const event = ref(null);
 const myEvents = ref([]);
 const currentYear = new Date().getFullYear();
 const eventId = router.params.id;
+
+const mapContainer = ref(null)
+let map
   
 // Format the event date into a human-readable format
 const formatDate = (date) => {
@@ -113,6 +122,50 @@ const convertToURL = (url) => {
     return 'http://localhost:3000' + url;
 };
 
+const renderMap = async (map) => {
+  const file = await fetch(convertToURL(event.value.gpxFile.url)).then(res => res.blob());
+  if (!file) return
+
+  const reader = new FileReader()
+  reader.onload = (e) => {
+    const parser = new DOMParser()
+    const xml = parser.parseFromString(e.target.result, 'application/xml')
+    const geojson = toGeoJSON.gpx(xml)
+
+    if (map.getSource('route')) {
+      map.getSource('route').setData(geojson)
+    } else {
+      map.addSource('route', {
+        type: 'geojson',
+        data: geojson
+      })
+
+      map.addLayer({
+        id: 'route-line',
+        type: 'line',
+        source: 'route',
+        layout: {
+          'line-join': 'round',
+          'line-cap': 'round'
+        },
+        paint: {
+          'line-color': '#22c55e',
+          'line-width': 4
+        }
+      })
+    }
+
+    // Fit bounds to route
+    const coords = geojson.features[0].geometry.coordinates
+    const bounds = coords.reduce(
+      (b, coord) => b.extend(coord),
+      new maplibregl.LngLatBounds(coords[0], coords[0])
+    )
+    map.fitBounds(bounds, { padding: 20 })
+  }
+  reader.readAsText(file)
+}
+
 const isUserRegistered = computed(() => {
   if (!myEvents.value || myEvents.value.length === 0) {
     return false;
@@ -126,6 +179,17 @@ onMounted(async () => {
     event.value = response.data
     const myEventsResponse = await getMyUpcomingEvents();
     myEvents.value = myEventsResponse.data.docs
+
+    map = new maplibregl.Map({
+    container: mapContainer.value,
+    style: `https://api.maptiler.com/maps/streets-v2/style.json?key=nzUJrrPcUiGLNkhSGHpz`, // You can use your own style URL
+    center: [-73.7, 45.4],
+    zoom: 10, 
+    interactive: false
+  })
+
+  await renderMap(map)
+
 });
 
 </script>

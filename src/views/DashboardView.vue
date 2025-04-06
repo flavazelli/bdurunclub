@@ -65,7 +65,7 @@
           >
           <p class="block text-2xl font-semibold text-green-700" >{{ run.title }}</p>
           <p class="text-gray-600">{{ formatDate(run.eventTime) }}</p>
-          <p class="text-gray-500 mt-2">Registered Users: {{ run.registeredUsers.length }}</p>
+          <p class="text-gray-500 mt-2">Registered Users: {{ run.registeredUsers? run.registeredUsers.length : 0 }}</p>
           </router-link>
 
         </div>
