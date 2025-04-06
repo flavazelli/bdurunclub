@@ -40,7 +40,7 @@
           >
             {{ run.title }}
           </router-link>
-          <p class="text-gray-600">{{ formatDate(run.date) }}</p>
+          <p class="text-gray-600">{{ formatDate(run.eventTime) }}</p>
           <button
             @click="openUnregisterModal(run.id)"
             class="mt-2 bg-red-600 text-white font-semibold py-2 px-4 rounded hover:bg-red-700"
@@ -108,17 +108,10 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { stringify } from 'qs-esm';
 import { useRouter } from 'vue-router';
-import { getEvents } from '@/api/events';
+import { getEvents, getMyUpcomingEvents, unregisterForEvent} from '@/api/events';
 
-onMounted(async () => {
-  try {
-    const response = await getEvents();
-    upcomingRuns.value = response.data.docs;
-  } catch (error) {
-    console.error('Failed to fetch events:', error);
-  }
-});
 
 const currentYear = new Date().getFullYear();
 const router = useRouter();
@@ -135,11 +128,6 @@ const registeredRuns = ref([]);
 // Modal state
 const showModal = ref(false);
 let runToUnregister = ref(null);
-
-// Navigate to event detail page
-const goToEvent = (eventId) => {
-  router.push(`/events/${eventId}`);
-};
 
 // Format date function
 const formatDate = (date) => {
@@ -165,8 +153,9 @@ const closeModal = () => {
 };
 
 // Confirm unregister
-const confirmUnregister = () => {
+const confirmUnregister = async () => {
   if (runToUnregister.value !== null) {
+    await  unregisterForEvent(runToUnregister.value);
     // Remove the run from registered runs
     registeredRuns.value = registeredRuns.value.filter(run => run.id !== runToUnregister.value);
 
@@ -175,6 +164,32 @@ const confirmUnregister = () => {
     closeModal();
   }
 };
+
+onMounted(async () => {
+  try {
+    const params = {
+      eventTime: {
+        greater_than: new Date().toISOString(),
+      },
+    }
+
+  
+    const allEvents = await getEvents(stringify(
+      {
+        where: params, // ensure that `qs-esm` adds the `where` property, too!
+      },
+      { addQueryPrefix: true },
+    ));
+
+
+    const myEvents =  await getMyUpcomingEvents();
+    upcomingRuns.value = allEvents.data.docs;
+    registeredRuns.value = myEvents.data.docs;
+    
+  } catch (error) {
+    console.error('Failed to fetch events:', error);
+  }
+});
 </script>
 
 <style scoped>

@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Cookies from 'js-cookie'
 import HomeView from '../views/HomeView.vue'
+import { verifyEmail } from '@/api/auth'  // Import the verifyEmail function from your API module
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -37,6 +38,19 @@ const router = createRouter({
       name: 'Event',
       component: () => import('../views/EventView.vue'),
       meta: { requiresAuth: true },
+    },
+    {
+      path: '/verify-email',
+      name: 'VerifyEmail',
+      beforeEnter: async (to, from, next) => {
+        try {
+          const response = await verifyEmail(to.query.token);
+          return next({ name: 'login', query: { status: 'verification-success' } });
+        } catch (error) {
+          return next({ name: 'login', query: { status: 'verification-failure' } });
+
+        }
+      },
     },
   ],
 })

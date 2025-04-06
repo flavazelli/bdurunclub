@@ -68,6 +68,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
 import { getEvents } from '@/api/events';
+import { stringify } from 'qs-esm';
 
 
 const currentYear = new Date().getFullYear();
@@ -103,7 +104,19 @@ const startAutoScroll = () => {
 
 const fetchUpcomingRuns = async () => {
   try {
-    const response = await getEvents();
+  
+    const response = await getEvents(stringify(
+      {
+        where: {
+          eventTime: {
+            greater_than: new Date().toISOString(),
+          },
+        }, 
+          sort: 'eventTime',
+      },
+      { addQueryPrefix: true },
+    ));
+
     const events = response.data.docs
     // Assuming the API returns an array of events with id, name, and date properties
     upcomingRuns.value = events.map(event => ({

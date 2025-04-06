@@ -29,10 +29,6 @@
           <div class="mt-8">
             <h3 class="text-xl font-semibold text-green-700">Starting Location</h3>
             <p class="text-gray-600">{{ event.startingLocation }}</p>
-            <div class="mt-4">
-              <h4 class="text-lg font-semibold text-green-700">Route Map</h4>
-              <img :src="event.routeMap" alt="Route Map" class="w-full h-auto rounded-lg shadow-md mt-2" />
-            </div>
           </div>
   
           <!-- Event Description -->
@@ -41,27 +37,34 @@
             <p class="text-gray-600 mt-2">{{ event.description }}</p>
           </div>
   
-          <!-- Download GPX File
           <div class="mt-8">
             <h3 class="text-xl font-semibold text-green-700">Download Route</h3>
             <a
-              :href="event.gpxFile"
+              :href="convertToURL(event.gpxFile.url)"
               download
               class="text-green-600 font-semibold underline mt-2 inline-block"
             >
               Download GPX File
             </a>
-          </div> -->
+          </div>
   
           <!-- Register Button -->
-          <div class="mt-8 text-center">
+            <div class="mt-8 text-center">
             <button
-              @click="registerForEvent"
+              v-if="!isUserRegistered"
+              @click="register"
               class="bg-green-600 text-white font-semibold py-3 px-6 rounded hover:bg-green-700 transition"
             >
               Register
             </button>
-          </div>
+            <button
+              v-else
+              @click="unregister"
+              class="bg-red-600 text-white font-semibold py-3 px-6 rounded hover:bg-red-700 transition"
+            >
+              Unregister
+            </button>
+            </div>
         </div>
       </section>
   
@@ -74,14 +77,15 @@
   
 <script setup>
 
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useRoute } from 'vue-router';
-import { getEvent } from '@/api/events'; // Assuming you have an API function to fetch event details
+import { getEvent, registerForEvent, unregisterForEvent, getMyUpcomingEvents} from '@/api/events'; // Assuming you have an API function to fetch event details
 
-const route = useRoute();
+const router = useRoute();
 const event = ref(null);
+const myEvents = ref([]);
 const currentYear = new Date().getFullYear();
-
+const eventId = router.params.id;
   
 // Format the event date into a human-readable format
 const formatDate = (date) => {
@@ -95,16 +99,33 @@ return new Intl.DateTimeFormat('en-US', {
 };
 
 // Register for the event function (dummy function for now)
-const registerForEvent = () => {
-    // This would trigger an API call to register the user for the event
-    alert(`You have successfully registered for the event: ${event.value.title}`);
-    // After registration, update UI, show success message, etc.
+const register = async () => {
+    await registerForEvent(eventId)
+    myEvents.value.push(event.value);
 };
 
+const unregister = async () => {
+    await unregisterForEvent(eventId)
+    myEvents.value = myEvents.value.filter(myEvent => myEvent.id !== eventId);
+};
+
+const convertToURL = (url) => {
+    return 'http://localhost:3000' + url;
+};
+
+const isUserRegistered = computed(() => {
+  if (!myEvents.value || myEvents.value.length === 0) {
+    return false;
+  }
+
+  return myEvents.value.some(myEvent => myEvent.id === eventId);
+});
+
 onMounted(async () => {
-    const eventId = route.params.id;
     const response = await getEvent(eventId);
     event.value = response.data
+    const myEventsResponse = await getMyUpcomingEvents();
+    myEvents.value = myEventsResponse.data.docs
 });
 
 </script>

@@ -28,8 +28,8 @@ export const signup = async (firstName, lastName, email, password) => {
     return response;
 };
 
-export const verifyEmail = async () => {
-    const response = await apiClient.post('/users/logout');
+export const verifyEmail = async (token) => {
+    const response = await apiClient.post(`/users/verify/${token}`);
     return response;
 };
 
