@@ -17,7 +17,7 @@
   
           <!-- Registered Users -->
           <div>
-            <h3 class="text-xl font-semibold text-green-700">Registered Users</h3>
+            <h3 class="text-xl font-semibold text-green-700">Registered Members</h3>
             <ul class="mt-4 space-y-2">
               <li v-for="user in event.registeredUsers" :key="user.id" class="flex justify-between">
                 <span>{{ user.firstName }} {{ user.lastName }}</span>
@@ -122,57 +122,61 @@ const convertToURL = (url) => {
     return 'http://localhost:3000' + url;
 };
 
+const isUserRegistered = computed(() => {
+    return myEvents.value.some(myEvent => myEvent.id === eventId);
+});
+
+
 const renderMap = async (map) => {
   const file = await fetch(convertToURL(event.value.gpxFile.url)).then(res => res.blob());
-  if (!file) return
+  if (!file) return;
 
-  const reader = new FileReader()
+  const reader = new FileReader();
   reader.onload = (e) => {
-    const parser = new DOMParser()
-    const xml = parser.parseFromString(e.target.result, 'application/xml')
-    const geojson = toGeoJSON.gpx(xml)
+    const parser = new DOMParser();
+    const xml = parser.parseFromString(e.target.result, 'application/xml');
+    const geojson = toGeoJSON.gpx(xml);
 
     if (map.getSource('route')) {
-      map.getSource('route').setData(geojson)
+      map.getSource('route').setData(geojson);
     } else {
       map.addSource('route', {
         type: 'geojson',
-        data: geojson
-      })
+        data: geojson,
+      });
 
+      // Add route line with directional arrows
       map.addLayer({
         id: 'route-line',
         type: 'line',
         source: 'route',
         layout: {
           'line-join': 'round',
-          'line-cap': 'round'
+          'line-cap': 'round',
+          'line-sort-key': 1,
         },
         paint: {
           'line-color': '#22c55e',
-          'line-width': 4
-        }
-      })
+          'line-width': 4,
+          'line-opacity': 0.8,
+        },
+      });
     }
 
+    // Add start and stop icons
+    const coords = geojson.features[0].geometry.coordinates;
+    const start = coords[0];
+    const end = coords[coords.length - 1];
+
     // Fit bounds to route
-    const coords = geojson.features[0].geometry.coordinates
     const bounds = coords.reduce(
       (b, coord) => b.extend(coord),
       new maplibregl.LngLatBounds(coords[0], coords[0])
-    )
-    map.fitBounds(bounds, { padding: 20 })
-  }
-  reader.readAsText(file)
-}
-
-const isUserRegistered = computed(() => {
-  if (!myEvents.value || myEvents.value.length === 0) {
-    return false;
-  }
-
-  return myEvents.value.some(myEvent => myEvent.id === eventId);
-});
+    );
+    map.fitBounds(bounds, { padding: 20 });
+  };
+  reader.readAsText(file);
+};
 
 onMounted(async () => {
     const response = await getEvent(eventId);
@@ -182,15 +186,15 @@ onMounted(async () => {
 
     map = new maplibregl.Map({
     container: mapContainer.value,
-    style: `https://api.maptiler.com/maps/streets-v2/style.json?key=nzUJrrPcUiGLNkhSGHpz`, // You can use your own style URL
+    style: `https://api.maptiler.com/maps/streets-v2/style.json?key=${import.meta.env.VITE_MAP_TILER_KEY}`, // You can use your own style URL
     center: [-73.7, 45.4],
     zoom: 10, 
     interactive: false
   })
-
+  
   await renderMap(map)
-
 });
+
 
 </script>
   

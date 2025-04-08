@@ -63,7 +63,11 @@ apiClient.interceptors.response.use(
             } catch (refreshError) {
                 // Handle refresh token failure
                 return Promise.reject(refreshError);
+                
             }
+        } else if (error.response && error.response.status === 401) {
+            Cookies.remove('jwt');
+            Cookies.remove('exp')
         }
 
         // Handle rate limiting

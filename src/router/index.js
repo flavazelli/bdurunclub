@@ -65,7 +65,10 @@ router.beforeEach((to, from, next) => {
 
   // Redirect unauthenticated users trying to access protected pages
   if (to.meta.requiresAuth && !jwt) {
-    return next({ name: 'login' }); // Redirect to login
+    return next({
+      name: 'login',
+      query: { redirectTo: to.fullPath }, // Add the referer query parameter
+    });
   }
 
   next(); // Proceed to the requested route

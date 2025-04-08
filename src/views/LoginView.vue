@@ -79,7 +79,9 @@ const handleLogin = async () => {
   errorMessage.value = ''; // Reset error message
   try {
     await login(email.value, password.value);
-    router.push('/members/dashboard');
+    // Redirect to the referer or default to the dashboard
+    const referer = router.currentRoute.value.query?.redirectTo|| '/members/dashboard';
+    router.push(referer);
   } catch  (error) {
     errorMessage.value = error.response?.data?.message || 'Something went wrong. Please try again.';
   }
