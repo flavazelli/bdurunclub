@@ -23,7 +23,7 @@ export const logout = async () => {
 };
 
 export const signup = async (firstName, lastName, email, password) => {
-    const response = await apiClient.post('/users', { firstName, lastName, email, password, roles: ["admin"] });
+    const response = await apiClient.post('/users', { firstName, lastName, email, password, roles: ["member"] });
     return response;
 };
 
