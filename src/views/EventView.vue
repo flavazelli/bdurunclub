@@ -125,7 +125,7 @@ const isUserRegistered = computed(() => {
 
 
 const renderMap = async (map) => {
-  const file = await fetch(event.value.gpxFile.url).then(res => res.blob());
+  const file = await fetch(event.value.gpxFile.url, { mode: 'no-cors' }).then(res => res.blob());
   if (!file) return;
 
   const reader = new FileReader();
