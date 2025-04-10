@@ -40,7 +40,7 @@
           <div class="mt-8">
             <h3 class="text-xl font-semibold text-green-700">Download Route</h3>
             <a
-              :href="convertToURL(event.gpxFile.url)"
+              :href="event.gpxFile.url"
               download
               class="text-green-600 font-semibold underline mt-2 inline-block"
             >
@@ -118,9 +118,6 @@ const unregister = async () => {
     myEvents.value = myEvents.value.filter(myEvent => myEvent.id !== eventId);
 };
 
-const convertToURL = (url) => {
-    return 'http://localhost:3000' + url;
-};
 
 const isUserRegistered = computed(() => {
     return myEvents.value.some(myEvent => myEvent.id === eventId);
@@ -128,7 +125,7 @@ const isUserRegistered = computed(() => {
 
 
 const renderMap = async (map) => {
-  const file = await fetch(convertToURL(event.value.gpxFile.url)).then(res => res.blob());
+  const file = await fetch(event.value.gpxFile.url).then(res => res.blob());
   if (!file) return;
 
   const reader = new FileReader();
