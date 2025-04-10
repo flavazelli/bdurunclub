@@ -41,8 +41,8 @@
             <h3 class="text-xl font-semibold text-green-700">Download Route</h3>
             <a
               :href="event.gpxFile.url"
-              download
               class="text-green-600 font-semibold underline mt-2 inline-block"
+              download
             >
               Download GPX File
             </a>
@@ -86,6 +86,7 @@ import { useRoute } from 'vue-router';
 import { getEvent, registerForEvent, unregisterForEvent, getMyUpcomingEvents} from '@/api/events'; // Assuming you have an API function to fetch event details
 import maplibregl from 'maplibre-gl'
 import * as toGeoJSON from '@tmcw/togeojson'
+import axios from 'axios';
 
 const router = useRoute();
 const event = ref(null);
@@ -125,7 +126,7 @@ const isUserRegistered = computed(() => {
 
 
 const renderMap = async (map) => {
-  const file = await fetch(event.value.gpxFile.url, { mode: 'no-cors' }).then(res => res.blob());
+  const file = await fetch(`https://bdu-run-club.storage.googleapis.com/${event.value.gpxFile.filename}`).then(res => res.blob());
   if (!file) return;
 
   const reader = new FileReader();
