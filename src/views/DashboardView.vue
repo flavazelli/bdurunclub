@@ -10,11 +10,11 @@
     <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-8">
       <div class="shadow-lg p-6 rounded-xl text-center bg-green-50">
         <h2 class="text-2xl font-semibold text-green-700">Total Runs Completed</h2>
-        <p class="text-3xl font-bold text-green-600">{{ totalRuns }}</p>
+        <p class="text-3xl font-bold text-green-600">Coming Soon</p>
       </div>
       <div class="shadow-lg p-6 rounded-xl text-center bg-green-50">
         <h2 class="text-2xl font-semibold text-green-700">Total KM Run</h2>
-        <p class="text-3xl font-bold text-green-600">{{ totalKm }} km</p>
+        <p class="text-3xl font-bold text-green-600">Coming Soon</p>
       </div>
       <div class="shadow-lg p-6 rounded-xl text-center bg-green-50">
         <h2 class="text-2xl font-semibold text-green-700">Profile</h2>
