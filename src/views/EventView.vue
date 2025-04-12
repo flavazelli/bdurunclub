@@ -126,7 +126,7 @@ const isUserRegistered = computed(() => {
 
 
 const renderMap = async (map) => {
-  const file = await fetch(`https://bdu-run-club.storage.googleapis.com/${event.value.gpxFile.filename}`).then(res => res.blob());
+  const file = await fetch(`https://assets.bdurunclub.com/${event.value.gpxFile.filename}`).then(res => res.blob());
   if (!file) return;
 
   const reader = new FileReader();

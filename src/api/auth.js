@@ -47,3 +47,8 @@ export const getLoggedInUser = async () => {
     const response = await apiClient.get('/users/me');
     return response;
 };
+
+export const updateUser = async (userId, userData) => {
+    const response = await apiClient.patch(`/users/${userId}`, userData);
+    return response;
+}

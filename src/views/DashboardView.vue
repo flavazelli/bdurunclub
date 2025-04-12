@@ -170,13 +170,12 @@ onMounted(async () => {
     const params = {
       eventTime: {
         greater_than: new Date().toISOString(),
-      },
-    }
-
-  
+      }    
+    };
     const allEvents = await getEvents(stringify(
       {
         where: params, // ensure that `qs-esm` adds the `where` property, too!
+        sort: 'eventTime'
       },
       { addQueryPrefix: true },
     ));
