@@ -28,6 +28,20 @@
         <p>Meet like-minded runners, share goals, and stay inspired together.</p>
       </div>
     </section>
+        <!-- Ethos & Guidelines -->
+      <section class="bg-white py-12 px-6 text-center border-t border-gray-200">
+      <h2 class="text-3xl font-bold mb-4 text-green-700">Our Ethos & Guidelines</h2>
+      <p class="text-gray-700 max-w-2xl mx-auto mb-6">
+        At Baie D'Urfé Social Run Club, we prioritize safety, inclusivity, and mutual respect. Understanding our community guidelines ensures a positive experience for all members.
+      </p>
+      <router-link
+        to="/ethos-and-guidelines"
+        class="inline-block bg-green-600 text-white font-semibold py-3 px-6 rounded hover:bg-green-700 transition"
+      >
+        Read Our Ethos & Guidelines
+      </router-link>
+    </section>
+
 
     <!-- Upcoming Runs Carousel -->
     <section class="bg-green-100 py-12 px-4">

@@ -9,103 +9,77 @@
     <!-- Profile Form Section -->
     <section class="max-w-4xl mx-auto p-8">
       <div class="bg-white shadow-lg rounded-xl p-8 space-y-8">
-        <div class="flex items-center space-x-6">
-          <!-- Profile Picture -->
-          <div class="w-24 h-24 rounded-full overflow-hidden">
-            <img
-              v-if="profilePicture"
-              :src="profilePicture"
-              alt="Profile Picture"
-              class="w-full h-full object-cover"
-            />
-            <div v-else class="w-full h-full bg-gray-200 flex justify-center items-center text-gray-400">
-              <span class="text-2xl">👤</span>
-            </div>
+        <!-- Level Selection -->
+        <div>
+          <h2 class="text-2xl font-semibold text-green-700">Level</h2>
+          <div class="mt-4 space-x-4">
+            <label class="inline-flex items-center">
+              <input
+                type="radio"
+                v-model="level"
+                value="beginner"
+                class="form-radio"
+              />
+              <span class="ml-2">Beginner</span>
+            </label>
+            <label class="inline-flex items-center">
+              <input
+                type="radio"
+                v-model="level"
+                value="intermediate"
+                class="form-radio"
+              />
+              <span class="ml-2">Intermediate</span>
+            </label>
+            <label class="inline-flex items-center">
+              <input
+                type="radio"
+                v-model="level"
+                value="advanced"
+                class="form-radio"
+              />
+              <span class="ml-2">Advanced</span>
+            </label>
           </div>
-          <div>
-            <button
-              @click="chooseFile"
-              class="bg-green-600 text-white font-semibold py-2 px-4 rounded hover:bg-green-700"
+        </div>
+
+        <!-- Baie D'Urfé Resident Checkbox -->
+        <div>
+          <h2 class="text-2xl font-semibold text-green-700">Are you a Baie D'Urfé resident?</h2>
+          <div class="mt-4">
+            <label class="inline-flex items-center">
+              <input
+                type="checkbox"
+                v-model="isResident"
+                class="form-checkbox"
+              />
+              <span class="ml-2">Yes</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Conversational Pace Dropdown -->
+        <div>
+          <h2 class="text-2xl font-semibold text-green-700">Conversational Pace</h2>
+          <div class="mt-4">
+            <select
+              v-model="pace"
+              class="w-full border border-gray-300 rounded-xl p-3"
             >
-              Change Picture
-            </button>
-            <input
-              type="file"
-              ref="fileInput"
-              accept="image/*"
-              @change="handleFileChange"
-              class="hidden"
-            />
+              <option disabled value="">Select Pace</option>
+              <option v-for="time in paceOptions" :key="time" :value="time">{{ time }} min/km</option>
+            </select>
           </div>
         </div>
 
-        <!-- Name Update Form -->
-        <div>
-          <h2 class="text-2xl font-semibold text-green-700">Update Your Name</h2>
-          <div class="mt-4 space-y-4">
-            <div class="flex space-x-4">
-              <div class="flex-1">
-                <label for="firstName" class="text-gray-600">First Name</label>
-                <input
-                  v-model="firstName"
-                  type="text"
-                  id="firstName"
-                  class="mt-1 block w-full border border-gray-300 rounded-xl p-3"
-                  placeholder="First Name"
-                />
-              </div>
-              <div class="flex-1">
-                <label for="lastName" class="text-gray-600">Last Name</label>
-                <input
-                  v-model="lastName"
-                  type="text"
-                  id="lastName"
-                  class="mt-1 block w-full border border-gray-300 rounded-xl p-3"
-                  placeholder="Last Name"
-                />
-              </div>
-            </div>
-          </div>
+        <!-- Disclaimer -->
+        <div class="mt-4 text-sm text-gray-500">
+          <p>
+            <strong>Disclaimer:</strong> The information you provide, including your level, residency status, and conversational pace, will only be used to understand the demographic composition of the Baie D'Urfé Social Run Club. Your data will never be shared with third parties.
+          </p>
         </div>
 
-        <!-- Password Change Form -->
-        <div>
-          <h2 class="text-2xl font-semibold text-green-700">Change Password</h2>
-          <div class="mt-4 space-y-4">
-            <div>
-              <label for="currentPassword" class="text-gray-600">Current Password</label>
-              <input
-                v-model="currentPassword"
-                type="password"
-                id="currentPassword"
-                class="mt-1 block w-full border border-gray-300 rounded-xl p-3"
-                placeholder="Current Password"
-              />
-            </div>
-            <div>
-              <label for="newPassword" class="text-gray-600">New Password</label>
-              <input
-                v-model="newPassword"
-                type="password"
-                id="newPassword"
-                class="mt-1 block w-full border border-gray-300 rounded-xl p-3"
-                placeholder="New Password"
-              />
-            </div>
-            <div>
-              <label for="confirmPassword" class="text-gray-600">Confirm New Password</label>
-              <input
-                v-model="confirmPassword"
-                type="password"
-                id="confirmPassword"
-                class="mt-1 block w-full border border-gray-300 rounded-xl p-3"
-                placeholder="Confirm New Password"
-              />
-            </div>
-          </div>
-        </div>
-
-          <!-- filepath: /Users/francislavazelli/code/bdu-run-club-web/src/views/UserProfileView.vue -->
+        <!-- Action Buttons -->
         <div class="mt-6 text-center">
           <button
             @click="updateProfile"
@@ -115,9 +89,15 @@
           </button>
           <button
             @click="logoutUser"
-            class="bg-red-600 text-white font-semibold py-3 px-6 rounded hover:bg-red-700"
+            class="bg-gray-600 text-white font-semibold py-3 px-6 rounded hover:bg-gray-700 mr-4"
           >
             Logout
+          </button>
+          <button
+            @click="openDeleteModal"
+            class="bg-red-600 text-white font-semibold py-3 px-6 rounded hover:bg-red-700"
+          >
+            Delete Account
           </button>
         </div>
 
@@ -132,64 +112,63 @@
     <footer class="text-center py-6 text-sm text-gray-500">
       &copy; {{ currentYear }} Baie D'Urfé Social Run Club. All rights reserved.
     </footer>
+
+    <!-- Warning Modal -->
+    <div v-if="showModal" class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
+      <div class="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full">
+        <h2 class="text-xl font-semibold text-red-600">Are you sure?</h2>
+        <p class="mt-4 text-gray-700">This action is irreversible. Are you sure you want to delete your account?</p>
+        <div class="mt-4 flex justify-end">
+          <button @click="closeDeleteModal" class="bg-gray-300 text-black py-2 px-4 rounded mr-4">Cancel</button>
+          <button @click="deleteAccount" class="bg-red-600 text-white py-2 px-4 rounded">Delete Account</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import {logout} from '@/api/auth'; // Assuming you have a logout function in your API module
+import { logout, getLoggedInUser, updateUser } from '@/api/auth'; // Assuming you have a logout function in your API module
 
 const currentYear = new Date().getFullYear();
 
 // Profile Data
-const firstName = ref('John');
-const lastName = ref('Doe');
-const currentPassword = ref('');
-const newPassword = ref('');
-const confirmPassword = ref('');
-const router  = useRouter();
-
-// Profile Picture
-const profilePicture = ref(null);
-const fileInput = ref(null);
+const level = ref('Beginner');
+const isResident = ref(false);
+const pace = ref('');
+const userId = ref(null);
+const router = useRouter();
 
 // Success/Error Message
 const message = ref(null);
 
-// Function to choose file for profile picture
-const chooseFile = () => {
-  fileInput.value.click();
-};
+// Show/Hide Modal
+const showModal = ref(false);
 
-// Handle file selection
-const handleFileChange = (event) => {
-  const file = event.target.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = () => {
-      profilePicture.value = reader.result;
-    };
-    reader.readAsDataURL(file);
-  }
-};
+// Generate an array of conversational pace options from 4:00 to 8:00 in 10-second increments
+const paceOptions = Array.from({ length: 25 }, (_, i) => {
+  const minutes = 4 + Math.floor(i * 10 / 60);
+  const seconds = (i * 10) % 60;
+  const time = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  return time;
+});
 
 // Validate form and simulate update profile
-const updateProfile = () => {
+const updateProfile =  async () => {
   // Reset any previous messages
   message.value = null;
+  console.log(userId.value)
+ 
+  await updateUser(userId.value, {
+    level: level.value,
+    bduResident: isResident.value,
+    pace: pace.value,
+  });
 
-  // Validate password confirmation
-  if (newPassword.value !== confirmPassword.value) {
-    message.value = { text: 'Passwords do not match.', success: false };
-    return;
-  }
+  message.value = { text: 'Profile updated successfully!', success: true };
 
-  // Simulate API request and update
-  setTimeout(() => {
-    // Normally, you would make an API call here
-    message.value = { text: 'Profile updated successfully!', success: true };
-  }, 1000);
 };
 
 // Function to handle logout
@@ -197,26 +176,60 @@ const logoutUser = async () => {
   await logout();
   // Redirect to the login page
   router.push('/login');
-
 };
+
+// Function to open the delete account modal
+const openDeleteModal = () => {
+  showModal.value = true;
+};
+
+// Function to close the delete account modal
+const closeDeleteModal = () => {
+  showModal.value = false;
+};
+
+// Function to handle account deletion
+const deleteAccount = async () => {
+  // Simulate account deletion (API call should go here)
+  message.value = { text: 'Account deleted successfully!', success: true };
+  setTimeout(() => {
+    router.push('/signup'); // Redirect to sign-up page after account deletion
+  }, 1000);
+};
+
+onMounted(async () => {
+  try {
+    // Fetch user data when the component mounts
+    const response = await getLoggedInUser();
+    userId.value = response.data.user.id;
+    level.value = response.data.user.level || 'beginner';
+    isResident.value = response.data.user.bduResident || false;
+    pace.value = response.data.user.pace || '';
+  } catch (error) {
+    console.error('Error fetching user data:', error);
+    message.value = { text: 'Failed to fetch user data.', success: false };
+  }
+});
+
 </script>
 
 <style scoped>
 /* Tailwind CSS is assumed to be globally available */
 
 /* Style adjustments for the profile section */
-input[type="text"],
-input[type="password"] {
+select {
   transition: border 0.3s ease;
-}
-
-input[type="text"]:focus,
-input[type="password"]:focus {
-  border-color: #4CAF50;
-  outline: none;
 }
 
 button:hover {
   transform: scale(1.05);
+}
+
+.modal-overlay {
+  z-index: 999;
+}
+
+.modal-content {
+  max-width: 400px;
 }
 </style>
