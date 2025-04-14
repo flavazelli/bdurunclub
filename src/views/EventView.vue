@@ -38,14 +38,19 @@
           </div>
   
           <div class="mt-8">
-            <h3 class="text-xl font-semibold text-green-700">Download Route</h3>
-            <a
-              :href="event.gpxFile.url"
-              class="text-green-600 font-semibold underline mt-2 inline-block"
-              download
-            >
-              Download GPX File
-            </a>
+            <h3 class="text-xl font-semibold text-green-700">Download Routes</h3>
+            <ul class="mt-4 flex flex-wrap gap-4">
+              <li v-for="(file, index) in event.gpxFile" :key="file.filename">
+                <a
+                :href="`${ASSETS_URL}/${file.filename}`"
+                class="text-green-600 font-semibold underline transition inline-flex items-center space-x-2"
+                download
+                @mouseover="highlightRoute(index)"
+                >
+                <span>Route {{ index + 1 }}</span>
+                </a>
+              </li>
+            </ul>
           </div>
 
           <div class="w-full h-[500px] rounded-xl shadow-md border border-gray-200">
@@ -86,13 +91,15 @@ import { useRoute } from 'vue-router';
 import { getEvent, registerForEvent, unregisterForEvent, getMyUpcomingEvents} from '@/api/events'; // Assuming you have an API function to fetch event details
 import maplibregl from 'maplibre-gl'
 import * as toGeoJSON from '@tmcw/togeojson'
-import axios from 'axios';
 
+
+const activeRouteIndex = ref(null)
 const router = useRoute();
 const event = ref(null);
 const myEvents = ref([]);
 const currentYear = new Date().getFullYear();
 const eventId = router.params.id;
+const ASSETS_URL = import.meta.env.VITE_ASSETS_URL
 
 const mapContainer = ref(null)
 let map
@@ -126,55 +133,71 @@ const isUserRegistered = computed(() => {
 
 
 const renderMap = async (map) => {
-  const file = await fetch(`https://assets.bdurunclub.com/${event.value.gpxFile.filename}`).then(res => res.blob());
-  if (!file) return;
+  // Loop through all GPX files
+  for (let i = 0; i < event.value.gpxFile.length; i++) {
+    const fileMeta = event.value.gpxFile[i]
+    const file = await fetch(`${ASSETS_URL}/${fileMeta.filename}`).then(res => res.blob())
+    if (!file) continue
 
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    const parser = new DOMParser();
-    const xml = parser.parseFromString(e.target.result, 'application/xml');
-    const geojson = toGeoJSON.gpx(xml);
+    const reader = new FileReader()
+    await new Promise(resolve => {
+      reader.onload = (e) => {
+        const parser = new DOMParser()
+        const xml = parser.parseFromString(e.target.result, 'application/xml')
+        const geojson = toGeoJSON.gpx(xml)
 
-    if (map.getSource('route')) {
-      map.getSource('route').setData(geojson);
-    } else {
-      map.addSource('route', {
-        type: 'geojson',
-        data: geojson,
-      });
+        const sourceId = `route-${i}`
+        const layerId = `route-line-${i}`
 
-      // Add route line with directional arrows
-      map.addLayer({
-        id: 'route-line',
-        type: 'line',
-        source: 'route',
-        layout: {
-          'line-join': 'round',
-          'line-cap': 'round',
-          'line-sort-key': 1,
-        },
-        paint: {
-          'line-color': '#22c55e',
-          'line-width': 4,
-          'line-opacity': 0.8,
-        },
-      });
+        if (!map.getSource(sourceId)) {
+          map.addSource(sourceId, { type: 'geojson', data: geojson })
+
+          map.addLayer({
+            id: layerId,
+            type: 'line',
+            source: sourceId,
+            layout: {
+              'line-join': 'round',
+              'line-cap': 'round',
+            },
+            paint: {
+              'line-color': '#22c55e',
+              'line-width': ['case', ['==', ['literal', i], ['get', 'index']], 6, 4],
+              'line-opacity': ['case', ['==', i, ['get', 'active']], 1.0, 0.4],
+            },
+          })
+        }
+
+        // Fit map to the first route
+        if (i === 0) {
+          const coords = geojson.features[0].geometry.coordinates
+          const bounds = coords.reduce(
+            (b, coord) => b.extend(coord),
+            new maplibregl.LngLatBounds(coords[0], coords[0])
+          )
+          map.fitBounds(bounds, { padding: 20 })
+        }
+
+        resolve()
+      }
+      reader.readAsText(file)
+    })
+  }
+}
+
+// Highlight the selected route when hovering
+const highlightRoute = (index) => {
+  if (!map) return
+  activeRouteIndex.value = index
+
+  event.value.gpxFile.forEach((_, i) => {
+    const layerId = `route-line-${i}`
+    if (map.getLayer(layerId)) {
+      map.setPaintProperty(layerId, 'line-opacity', i === index ? 1 : 0.4)
+      map.setPaintProperty(layerId, 'line-width', i === index ? 6 : 4)
     }
-
-    // Add start and stop icons
-    const coords = geojson.features[0].geometry.coordinates;
-    const start = coords[0];
-    const end = coords[coords.length - 1];
-
-    // Fit bounds to route
-    const bounds = coords.reduce(
-      (b, coord) => b.extend(coord),
-      new maplibregl.LngLatBounds(coords[0], coords[0])
-    );
-    map.fitBounds(bounds, { padding: 20 });
-  };
-  reader.readAsText(file);
-};
+  })
+}
 
 onMounted(async () => {
     const response = await getEvent(eventId);
