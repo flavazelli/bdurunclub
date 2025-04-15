@@ -14,7 +14,7 @@ const router = createRouter({
     {
       path: '/ethos-and-guidelines',
       name: 'ethos-and-guidelines',
-      component: import('../views/EthosAndGuidelines.vue'),
+      component: () => import('../views/EthosAndGuidelines.vue'),
     },
     {
       path: '/login',
