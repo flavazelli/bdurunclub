@@ -64,7 +64,7 @@ router.beforeEach((to, from, next) => {
   const jwt = Cookies.get('jwt'); // Check if the JWT cookie is set
 
   // Redirect logged-in users away from public pages
-  if (jwt && (to.path === '/' || to.path === '/login' || to.path === '/signup')) {
+  if (jwt && (to.path === '/' || to.path === '/login' || to.path === '/signup' || to.path === '/ethos-and-guidelines')) {
     return next({ name: 'dashboard' }); // Redirect to the dashboard or another protected page
   }
 

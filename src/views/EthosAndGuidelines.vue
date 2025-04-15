@@ -16,7 +16,7 @@
             <li><strong>Casual Pace:</strong> This is a social run. Chatting pace. If there's interest in hard training, separate sessions may be added in the future.</li>
             <li><strong>No One Left Behind:</strong> We finish together. Support each other.</li>
             <li><strong>Encourage & Include:</strong> Uplift your fellow runners. Community is the goal.</li>
-            <li><strong>We’ve All Been the Slowest:</strong> Show empathy. Be the runner you needed when you started.</li>
+            <li><strong>We've All Been the Slowest:</strong> Show empathy. Be the runner you needed when you started.</li>
           </ul>
         </div>
   
@@ -59,8 +59,8 @@
             <li><strong>Wear High-Vis in the Dark:</strong> Safety first.</li>
             <li><strong>No Headphones:</strong> Stay aware and social.</li>
             <li><strong>Bring ID & Meds:</strong> Be prepared.</li>
-            <li><strong>Let Someone Know if Leaving Early:</strong> Don’t ghost the group.</li>
-            <li><strong>Cross Safely:</strong> Look both ways. Don’t blindly follow others.</li>
+            <li><strong>Let Someone Know if Leaving Early:</strong> Don't ghost the group.</li>
+            <li><strong>Cross Safely:</strong> Look both ways. Don't blindly follow others.</li>
             <li><strong>Respect Public Spaces:</strong> Share paths, be polite.</li>
             <li><strong>Faster Runners:</strong> Loop back, give others rest, and support the leader.</li>
             <li><strong>Choose the Right Group:</strong> Adjust based on your pace week to week.</li>
