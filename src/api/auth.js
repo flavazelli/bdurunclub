@@ -8,8 +8,13 @@ export const login = async (email, password) => {
     });
 
     if (response.data.token) {
-        Cookies.set('jwt', response.data.token, { path: '/' });
-        Cookies.set('exp', response.data.exp, { path: '/' });
+        // Set the JWT token in a cookie with the Secure flag
+        Cookies.set('jwt', response.data.token, {
+          path: '/',
+          secure: process.env.NODE_ENV === 'production', // Secure only in production
+          sameSite: process.env.NODE_ENV === 'production' ? 'Strict' : 'Lax', // Strict in production, Lax otherwise
+          expires: new Date(response.data.exp * 1000) // Convert timestamp to a Date object
+        });
     }
 
     return response;
@@ -18,7 +23,6 @@ export const login = async (email, password) => {
 export const logout = async () => {
     const response = await apiClient.post('/users/logout');
     Cookies.remove('jwt');
-    Cookies.remove('exp');
     return response;
 };
 

@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Cookies from 'js-cookie'
-import HomeView from '../views/HomeView.vue'
 import { verifyEmail } from '@/api/auth'  // Import the verifyEmail function from your API module
 
 const router = createRouter({
@@ -9,7 +8,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView,
+      component: () => import('../views/HomeView.vue'),
     },
     {
       path: '/ethos-and-guidelines',
