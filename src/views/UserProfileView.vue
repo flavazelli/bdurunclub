@@ -130,7 +130,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { logout, getLoggedInUser, updateUser } from '@/api/auth'; // Assuming you have a logout function in your API module
+import { logout, getLoggedInUser, updateUser } from '@/api/auth'; 
 
 const currentYear = new Date().getFullYear();
 
@@ -159,7 +159,6 @@ const paceOptions = Array.from({ length: 25 }, (_, i) => {
 const updateProfile =  async () => {
   // Reset any previous messages
   message.value = null;
-  console.log(userId.value)
  
   await updateUser(userId.value, {
     level: level.value,
