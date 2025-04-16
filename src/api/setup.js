@@ -1,5 +1,7 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { jwtDecode } from "jwt-decode";
+
 
 // Base URL for the API
 const BASE_URL = import.meta.env.VITE_BASE_API_URL || 'http://localhost:3000/api/';
@@ -42,8 +44,8 @@ apiClient.interceptors.response.use(
 
         // Handle unauthorized/unauthenticated errors
         const token = Cookies.get('jwt') // Get JWT token from cookie
-        const tokenExpiration = Cookies.get('exp'); // Get token expiration from cookie
-        if (token && tokenExpiration && new Date() > new Date(tokenExpiration + 60) && error.response && error.response.status === 401 && !originalRequest._retry) {
+        const decoded = jwtDecode(token);
+        if (token && tokenExpiration && new Date() > new Date(decoded.exp + 60) && error.response && error.response.status === 401 && !originalRequest._retry) {
             
             originalRequest._retry = true;
 
@@ -52,11 +54,14 @@ apiClient.interceptors.response.use(
                 const response = await axios.post(`${BASE_URL}/users/refresh-token`);
 
                 const newToken = response.data.refreshedToken;
-                const newExpiration = response.data.exp;
-
                 // Update the JWT cookie and expiration
-                Cookies.set('jwt', newToken, { expires: new Date(newExpiration) });
-                Cookies.set('exp', newExpiration, { expires: new Date(newExpiration) });
+                // Set the JWT token in a cookie with the Secure flag
+                Cookies.set('jwt', newToken, {
+                    path: '/',
+                    secure: process.env.NODE_ENV === 'production', // Secure only in production
+                    sameSite: process.env.NODE_ENV === 'production' ? 'Strict' : 'Lax', // Strict in production, Lax otherwise
+                    expires: new Date(response.data.exp * 1000) // Convert timestamp to a Date object
+                });
 
                // Retry the original request with the new token
                 originalRequest.headers.Authorization = `JWT ${newToken}`;
@@ -68,7 +73,6 @@ apiClient.interceptors.response.use(
             }
         } else if (error.response && error.response.status === 401) {
             Cookies.remove('jwt');
-            Cookies.remove('exp')
         }
 
         // Handle rate limiting
