@@ -131,27 +131,54 @@ const isUserRegistered = computed(() => {
     return myEvents.value.some(myEvent => myEvent.id === eventId);
 });
 
+const loadIcons = async (map) => {
+  // Load the start icon
+  map.loadImage(new URL('@/assets/start-icon.png', import.meta.url).href, (error, image) => {
+    if (error) throw error;
+    if (!map.hasImage('start-icon')) {
+      map.addImage('start-icon', image);
+    }
+  });
+
+  // Load the stop icon
+  map.loadImage(new URL('@/assets/stop-icon.png', import.meta.url).href, (error, image) => {
+    if (error) throw error;
+    if (!map.hasImage('stop-icon')) {
+      map.addImage('stop-icon', image);
+    }
+  });
+
+  // Load the directional arrow icon
+  map.loadImage(new URL('@/assets/arrow-icon.png', import.meta.url).href, (error, image) => {
+    if (error) throw error;
+    if (!map.hasImage('arrow')) {
+      map.addImage('arrow', image);
+    }
+  });
+};
 
 const renderMap = async (map) => {
-  // Loop through all GPX files
+  await loadIcons(map); // Ensure icons are loaded
+
   for (let i = 0; i < event.value.gpxFile.length; i++) {
-    const fileMeta = event.value.gpxFile[i]
-    const file = await fetch(`${ASSETS_URL}/${fileMeta.filename}`).then(res => res.blob())
-    if (!file) continue
+    const fileMeta = event.value.gpxFile[i];
+    const file = await fetch(`${ASSETS_URL}/${fileMeta.filename}`).then((res) => res.blob());
+    if (!file) continue;
 
-    const reader = new FileReader()
-    await new Promise(resolve => {
+    const reader = new FileReader();
+    await new Promise((resolve) => {
       reader.onload = (e) => {
-        const parser = new DOMParser()
-        const xml = parser.parseFromString(e.target.result, 'application/xml')
-        const geojson = toGeoJSON.gpx(xml)
+        const parser = new DOMParser();
+        const xml = parser.parseFromString(e.target.result, 'application/xml');
+        const geojson = toGeoJSON.gpx(xml);
 
-        const sourceId = `route-${i}`
-        const layerId = `route-line-${i}`
+        const sourceId = `route-${i}`;
+        const layerId = `route-line-${i}`;
 
         if (!map.getSource(sourceId)) {
-          map.addSource(sourceId, { type: 'geojson', data: geojson })
+          map.addSource(sourceId, { type: 'geojson', data: geojson });
 
+          // Add route line layer
           map.addLayer({
             id: layerId,
             type: 'line',
@@ -165,25 +192,83 @@ const renderMap = async (map) => {
               'line-width': ['case', ['==', ['literal', i], ['get', 'index']], 6, 4],
               'line-opacity': ['case', ['==', i, ['get', 'active']], 1.0, 0.4],
             },
-          })
+          });
+
+          // Add directional arrows
+          map.addLayer({
+            id: `${layerId}-arrows`,
+            type: 'symbol',
+            source: sourceId,
+            layout: {
+              'symbol-placement': 'line',
+              'symbol-spacing': 50,
+              'icon-image': 'arrow',
+              'icon-size': 0.6,
+            },
+            paint: {
+              'icon-color': '#22c55e',
+            },
+          });
+
+          // Add start and stop icons
+          const startCoord = geojson.features[0].geometry.coordinates[0];
+          const endCoord = geojson.features[0].geometry.coordinates.slice(-1)[0];
+
+          map.addLayer({
+            id: `${layerId}-start`,
+            type: 'symbol',
+            source: {
+              type: 'geojson',
+              data: {
+                type: 'Feature',
+                geometry: {
+                  type: 'Point',
+                  coordinates: startCoord,
+                },
+              },
+            },
+            layout: {
+              'icon-image': 'start-icon',
+              'icon-size': 1,
+            },
+          });
+
+          map.addLayer({
+            id: `${layerId}-end`,
+            type: 'symbol',
+            source: {
+              type: 'geojson',
+              data: {
+                type: 'Feature',
+                geometry: {
+                  type: 'Point',
+                  coordinates: endCoord,
+                },
+              },
+            },
+            layout: {
+              'icon-image': 'stop-icon',
+              'icon-size': 1,
+            },
+          });
         }
 
         // Fit map to the first route
         if (i === 0) {
-          const coords = geojson.features[0].geometry.coordinates
+          const coords = geojson.features[0].geometry.coordinates;
           const bounds = coords.reduce(
             (b, coord) => b.extend(coord),
             new maplibregl.LngLatBounds(coords[0], coords[0])
-          )
-          map.fitBounds(bounds, { padding: 20 })
+          );
+          map.fitBounds(bounds, { padding: 20 });
         }
 
-        resolve()
-      }
-      reader.readAsText(file)
-    })
+        resolve();
+      };
+      reader.readAsText(file);
+    });
   }
-}
+};
 
 // Highlight the selected route when hovering
 const highlightRoute = (index) => {
@@ -211,9 +296,11 @@ onMounted(async () => {
     center: [-73.7, 45.4],
     zoom: 10, 
     interactive: false
-  })
-  
-  await renderMap(map)
+    });
+
+    map.on('load', async () => {
+      await renderMap(map);
+    });
 });
 
 
