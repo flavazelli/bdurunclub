@@ -13,10 +13,6 @@
         <p class="text-3xl font-bold text-green-600">Coming Soon</p>
       </div>
       <div class="shadow-lg p-6 rounded-xl text-center bg-green-50">
-        <h2 class="text-2xl font-semibold text-green-700">Total KM Run</h2>
-        <p class="text-3xl font-bold text-green-600">Coming Soon</p>
-      </div>
-      <div class="shadow-lg p-6 rounded-xl text-center bg-green-50">
         <h2 class="text-2xl font-semibold text-green-700">Profile</h2>
         <router-link to="/members/profile" class="text-lg text-green-600 hover:text-green-800">Go to Profile</router-link>
       </div>
@@ -109,15 +105,11 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { stringify } from 'qs-esm';
-import { useRouter } from 'vue-router';
 import { getEvents, getMyUpcomingEvents, unregisterForEvent} from '@/api/events';
 
-
 const currentYear = new Date().getFullYear();
-const router = useRouter();
 
 const totalRuns = ref(12); // Placeholder for total runs completed
-const totalKm = ref(85); // Placeholder for total km run
 
 // Placeholder upcoming runs
 const upcomingRuns = ref([]);
@@ -155,7 +147,7 @@ const closeModal = () => {
 // Confirm unregister
 const confirmUnregister = async () => {
   if (runToUnregister.value !== null) {
-    await  unregisterForEvent(runToUnregister.value);
+    await unregisterForEvent(runToUnregister.value);
     // Remove the run from registered runs
     registeredRuns.value = registeredRuns.value.filter(run => run.id !== runToUnregister.value);
 

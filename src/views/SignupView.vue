@@ -39,6 +39,7 @@
         </div>
 
         <button
+          :disabled="isSigningUp"
           type="submit"
           class="w-full bg-green-600 text-white font-semibold py-3 px-6 rounded hover:bg-green-700 transition"
         >
@@ -80,6 +81,7 @@ const form = ref({
 
 const errorMessage = ref('');
 const showModal = ref(false);
+const isSigningUp = ref(false);
 
 const handleSignup = async () => {
   if (form.value.password !== form.value.confirmPassword) {
@@ -91,10 +93,13 @@ const handleSignup = async () => {
   errorMessage.value = ''; // Reset error message
   try {
     // Make the API call to the signup function
+    isSigningUp.value = true;
     await signup(firstName, lastName, email, password);
     showModal.value = true;
   } catch (error) {
     errorMessage.value = error.response?.data?.message || 'Something went wrong. Please try again.';
+  } finally {
+    isSigningUp.value = false;
   }
 };
 </script>
