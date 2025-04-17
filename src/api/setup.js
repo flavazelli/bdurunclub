@@ -45,7 +45,7 @@ apiClient.interceptors.response.use(
         // Handle unauthorized/unauthenticated errors
         const token = Cookies.get('jwt') // Get JWT token from cookie
         const decoded = jwtDecode(token);
-        if (token && tokenExpiration && new Date() > new Date(decoded.exp + 60) && error.response && error.response.status === 401 && !originalRequest._retry) {
+        if (token && decoded.exp && new Date() > new Date(decoded.exp + 60) && error.response && error.response.status === 401 && !originalRequest._retry) {
             
             originalRequest._retry = true;
 
