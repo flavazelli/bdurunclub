@@ -5,42 +5,48 @@ import { verifyEmail } from '@/api/auth'  // Import the verifyEmail function fro
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'NotFound',
+      component: () => import('@/views/NotFound.vue'),
+    },
     {
       path: '/',
       name: 'home',
-      component: () => import('../views/HomeView.vue'),
+      component: () => import('@/views/HomeView.vue'),
     },
     {
       path: '/ethos-and-guidelines',
       name: 'ethos-and-guidelines',
-      component: () => import('../views/EthosAndGuidelines.vue'),
+      component: () => import('@/views/EthosAndGuidelines.vue'),
     },
     {
       path: '/login',
       name: 'login',
-      component: () => import('../views/LoginView.vue'),
+      component: () => import('@/views/LoginView.vue'),
     },
     {
       path: '/signup',
       name: 'signup',
-      component: () => import('../views/SignupView.vue'),
+      component: () => import('@/views/SignupView.vue'),
     },
     {
       path: '/members/dashboard',
       name: 'dashboard',
-      component: () => import('../views/DashboardView.vue'),
+      component: () => import('@/views/DashboardView.vue'),
       meta: { requiresAuth: true },
     },
     {
       path: '/members/profile/',
       name: 'profile',
-      component: () => import('../views/UserProfileView.vue'),
+      component: () => import('@/views/UserProfileView.vue'),
       meta: { requiresAuth: true },
     },
     {
       path: '/events/:id',
       name: 'Event',
-      component: () => import('../views/EventView.vue'),
+      component: () => import('@/views/EventView.vue'),
       meta: { requiresAuth: true },
     },
     {
