@@ -41,7 +41,10 @@
         <button
           :disabled="isSigningUp"
           type="submit"
-          class="w-full bg-green-600 text-white font-semibold py-3 px-6 rounded hover:bg-green-700 transition"
+          :class="[
+            'w-full text-white font-semibold py-3 px-6 rounded transition',
+            isSigningUp ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700'
+          ]"
         >
           Sign Up
         </button>
