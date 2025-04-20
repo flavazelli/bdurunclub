@@ -100,6 +100,8 @@
       &copy; {{ currentYear }} Baie D'Urfé Social Run Club. All rights reserved.
     </footer>
   </div>
+
+
 </template>
 
 <script setup>
@@ -107,16 +109,14 @@ import { ref, onMounted } from 'vue';
 import { stringify } from 'qs-esm';
 import { getEvents, getMyUpcomingEvents, unregisterForEvent} from '@/api/events';
 
+
 const currentYear = new Date().getFullYear();
 
 const totalRuns = ref(12); // Placeholder for total runs completed
-
 // Placeholder upcoming runs
 const upcomingRuns = ref([]);
-
 // Placeholder registered runs
 const registeredRuns = ref([]);
-
 // Modal state
 const showModal = ref(false);
 let runToUnregister = ref(null);
@@ -158,6 +158,7 @@ const confirmUnregister = async () => {
 };
 
 onMounted(async () => {
+
   try {
     const params = {
       eventTime: {
@@ -176,7 +177,6 @@ onMounted(async () => {
     const myEvents =  await getMyUpcomingEvents();
     upcomingRuns.value = allEvents.data.docs;
     registeredRuns.value = myEvents.data.docs;
-    
   } catch (error) {
     console.error('Failed to fetch events:', error);
   }
