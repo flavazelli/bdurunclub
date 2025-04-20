@@ -7,8 +7,8 @@
       </header>
   
       <!-- Event Details Section -->
-      <section class="max-w-4xl mx-auto p-8" v-if="event">
-        <div class="bg-white shadow-lg rounded-xl p-8 space-y-8">
+      <section class="max-w-4xl mx-auto p-0 sm:p-8" v-if="event">
+        <div class="bg-white sm:shadow-lg rounded-xl p-8 space-y-8">
           <!-- Event Title and Time -->
           <div>
             <h2 class="text-3xl font-semibold text-green-700">{{ event.title }}</h2>

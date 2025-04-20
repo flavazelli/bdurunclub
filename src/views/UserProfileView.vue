@@ -7,8 +7,8 @@
     </header>
 
     <!-- Profile Form Section -->
-    <section class="max-w-4xl mx-auto p-8">
-      <div class="bg-white shadow-lg rounded-xl p-8 space-y-8">
+    <section class="max-w-4xl mx-auto p-0 sm:p-8">
+      <div class="bg-white sm:shadow-lg rounded-xl p-8 space-y-8">
         <!-- Level Selection -->
         <div>
           <h2 class="text-2xl font-semibold text-green-700">Level</h2>
@@ -93,12 +93,12 @@
           >
             Logout
           </button>
-          <button
+          <!-- <button
             @click="openDeleteModal"
             class="bg-red-600 text-white font-semibold py-3 px-6 rounded hover:bg-red-700"
           >
             Delete Account
-          </button>
+          </button> -->
         </div>
 
         <!-- Error / Success Message -->
