@@ -7,7 +7,7 @@
     </header>
 
     <!-- Signup Form -->
-    <section class="max-w-lg mx-auto p-6 bg-white rounded-xl shadow-md mt-8">
+    <section class="max-w-lg mx-auto p-6 bg-white rounded-xl sm:shadow-md mt-8">
       <form @submit.prevent="handleSignup">
         <div class="mb-4">
           <label for="firstName" class="block text-sm font-semibold text-gray-700">First Name</label>
