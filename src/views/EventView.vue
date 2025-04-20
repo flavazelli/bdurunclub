@@ -82,6 +82,34 @@
         &copy; {{ currentYear }} Baie D'Urfé Social Run Club. All rights reserved.
       </footer>
     </div>
+    <!-- Survey Modal -->
+
+    <div
+      v-if="showSurveyModal"
+      class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
+      @click.self="closeSurveyModal"
+    >
+      <div class="bg-white rounded-xl p-8 shadow-xl w-[90%] max-w-md text-center">
+            <h3 class="text-2xl font-semibold text-green-700 mb-4">You registered for your first run!</h3>
+            <p class="text-gray-700 mb-6">Have a minute to provide feedback? Please take a minute to complete our short survey! </p>
+            <div class="flex justify-center gap-4">
+              <a
+                href="https://forms.gle/R9Se9K69SPVyAihu7"
+                target="_blank"
+                class="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700"
+                @click="closeSurveyModal"
+              >
+                Take the Survey
+              </a>
+              <button
+                @click="closeSurveyModal"
+                class="bg-gray-300 text-black py-2 px-4 rounded hover:bg-gray-400"
+              >
+                Maybe Later
+              </button>
+            </div>
+          </div>
+      </div>
   </template>
   
 <script setup>
@@ -93,6 +121,7 @@ import maplibregl from 'maplibre-gl'
 import * as toGeoJSON from '@tmcw/togeojson'
 
 
+const showSurveyModal = ref(false);
 const activeRouteIndex = ref(null)
 const router = useRoute();
 const event = ref(null);
@@ -118,6 +147,13 @@ return new Intl.DateTimeFormat('en-US', {
 // Register for the event function (dummy function for now)
 const register = async () => {
     await registerForEvent(eventId)
+
+    const hasSeenSurvey = localStorage.getItem('seenSurveyModal');
+
+    if (!hasSeenSurvey) {
+      showSurveyModal.value = true;
+    }
+    
     myEvents.value.push(event.value);
 };
 
@@ -126,10 +162,16 @@ const unregister = async () => {
     myEvents.value = myEvents.value.filter(myEvent => myEvent.id !== eventId);
 };
 
+const closeSurveyModal = () => {
+  showSurveyModal.value = false;
+  localStorage.setItem('seenSurveyModal', 'true');
+};
 
 const isUserRegistered = computed(() => {
     return myEvents.value.some(myEvent => myEvent.id === eventId);
 });
+
+
 
 const loadIcons = async (map) => {
   // Load the start icon
