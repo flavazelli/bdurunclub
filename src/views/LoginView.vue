@@ -92,7 +92,7 @@ const handleLogin = async () => {
     })
     router.push(referer)
   } catch (error) {
-    errorMessage.value = error.response?.data?.message || 'Something went wrong. Please try again.'
+    errorMessage.value = error.response?.data?.message || "Something went wrong. Please try again. If it's your first time logging in, please check your email for verification."
     posthog.capture('user failed to login', {
       email: email,
     })
