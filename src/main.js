@@ -4,8 +4,6 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import * as Sentry from "@sentry/vue";
-import posthogPlugin from "@/plugins/posthog"; //import the plugin. 
-
 
 const app = createApp(App)
 
@@ -20,6 +18,5 @@ Sentry.init({
       ],
 });
 
-app.use(posthogPlugin); //install the plugin
 app.use(router)
 app.mount('#app')

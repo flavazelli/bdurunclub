@@ -1,5 +1,8 @@
 import apiClient from './setup';
 import Cookies from 'js-cookie';
+import { usePostHog } from '@/composables/usePosthog'
+
+const { posthog } = usePostHog()
 
 export const login = async (email, password) => {
     const response = await apiClient.post('/users/login', {
@@ -9,6 +12,11 @@ export const login = async (email, password) => {
 
     if (response.data.token) {
         // Set the JWT token in a cookie with the Secure flag
+        posthog.identify(response.data.user.id, {
+            email: response.data.user.email,
+            firstName: response.data.user.firstName,
+            lastName: response.data.user.lastName,
+        });
         Cookies.set('jwt', response.data.token, {
           path: '/',
           secure: process.env.NODE_ENV === 'production', // Secure only in production
@@ -22,6 +30,7 @@ export const login = async (email, password) => {
 
 export const logout = async () => {
     const response = await apiClient.post('/users/logout');
+    posthog.reset();
     Cookies.remove('jwt');
     return response;
 };

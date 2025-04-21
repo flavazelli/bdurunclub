@@ -1,6 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Cookies from 'js-cookie'
 import { verifyEmail } from '@/api/auth'  // Import the verifyEmail function from your API module
+import { usePostHog } from '@/composables/usePosthog' 
+import { jwtDecode } from 'jwt-decode'
+
+const { posthog } = usePostHog()
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -79,6 +83,14 @@ router.beforeEach((to, from, next) => {
       name: 'login',
       query: { redirectTo: to.fullPath }, // Add the referer query parameter
     });
+  }
+
+  const decoded = jwt ? jwtDecode(jwt) : null;
+
+  if (decoded?.id && posthog.get_distinct_id() !== decoded.id) {
+    posthog.identify(decoded.id, {
+      email: decoded.email,
+    })
   }
 
   next(); // Proceed to the requested route
