@@ -38,20 +38,41 @@
           </div>
   
           <div class="mt-8">
-            <h3 class="text-xl font-semibold text-green-700">Download Routes</h3>
-            <ul class="mt-4 flex flex-wrap gap-4">
-              <li v-for="(file, index) in event.gpxFile" :key="file.filename">
-                <a
-                :href="`${ASSETS_URL}/${file.filename}`"
-                class="text-green-600 font-semibold underline transition inline-flex items-center space-x-2"
-                download
-                @mouseover="highlightRoute(index)"
-                >
-                <span>Route {{ index + 1 }}</span>
-                </a>
-              </li>
-            </ul>
-          </div>
+  <div class="flex items-center gap-2">
+    <h3 class="text-xl font-semibold text-green-700">Download Routes (GPX Files)</h3>
+
+    <div
+      class="relative"
+      @mouseenter="showTooltip = true"
+      @mouseleave="showTooltip = false"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-500 cursor-pointer" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v.5a.75.75 0 001.5 0v-.5zm0 3a.75.75 0 00-1.5 0v5a.75.75 0 001.5 0v-5z" clip-rule="evenodd" />
+      </svg>
+
+      <div
+        v-if="showTooltip"
+        class="absolute left-6 top-1/2 -translate-y-1/2 w-64 bg-white text-sm text-gray-700 shadow-lg border border-gray-200 rounded-lg px-4 py-2 z-50"
+      >
+        You can upload this file into your fitness watch (like Garmin) to follow the route on your run.
+      </div>
+    </div>
+  </div>
+
+  <ul class="mt-4 flex flex-wrap gap-4">
+    <li v-for="(file, index) in event.gpxFile" :key="file.filename">
+      <a
+        :href="`${ASSETS_URL}/${file.filename}`"
+        class="text-green-600 font-semibold underline transition inline-flex items-center space-x-2"
+        download
+        @mouseover="highlightRoute(index)"
+      >
+        <span>Route {{ index + 1 }}</span>
+      </a>
+    </li>
+  </ul>
+</div>
+
 
           <div class="w-full h-[500px] rounded-xl shadow-md border border-gray-200">
             <div ref="mapContainer" class="w-full h-full" />
@@ -133,8 +154,7 @@ const eventId = router.params.id;
 const ASSETS_URL = import.meta.env.VITE_ASSETS_URL
 const { posthog } = usePostHog()
 const loggedInUser = ref(null);
-
-
+const showTooltip = ref(false);
 const mapContainer = ref(null)
 let map
   
