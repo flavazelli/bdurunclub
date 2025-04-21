@@ -83,6 +83,7 @@
 import { ref, onMounted, onUnmounted } from 'vue';
 import { getEvents } from '@/api/events';
 import { stringify } from 'qs-esm';
+import { usePosthog } from '@/composables/usePosthog'
 
 
 const currentYear = new Date().getFullYear();

@@ -69,11 +69,13 @@
 import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { login } from '@/api/auth';
+import { usePosthog } from '@/composables/usePosthog';
 
 const email = ref('');
 const password = ref('');
 const router = useRouter();
 const errorMessage = ref('');
+const posthog = usePosthog()
 
 const handleLogin = async () => {
   errorMessage.value = ''; // Reset error message
@@ -81,9 +83,15 @@ const handleLogin = async () => {
     await login(email.value, password.value);
     // Redirect to the referer or default to the dashboard
     const referer = router.currentRoute.value.query?.redirectTo|| '/members/dashboard';
+    posthog.capture({event: 'User Logged In', properties: {
+        email: email,
+    }});
     router.push(referer);
   } catch  (error) {
     errorMessage.value = error.response?.data?.message || 'Something went wrong. Please try again.';
+    posthog.capture({event: 'User Failed to Login', properties: {
+        email: email,
+    }});
   }
 
 };
