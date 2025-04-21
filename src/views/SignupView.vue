@@ -71,9 +71,10 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { signup } from '../api/auth.js'; 
+import { usePosthog } from '@/composables/usePosthog';
 
 const router = useRouter();
-
+const posthog = usePosthog();
 const form = ref({
   firstName: '',
   lastName: '',
@@ -98,8 +99,18 @@ const handleSignup = async () => {
     // Make the API call to the signup function
     isSigningUp.value = true;
     await signup(firstName, lastName, email, password);
+    posthog.capture({
+        event: 'User Signed Up', 
+        properties: {
+          email: email,
+    }});
     showModal.value = true;
   } catch (error) {
+    posthog.capture({
+      event: 'User Failed to Signed Up', 
+      properties: {
+        email: email,
+    }});
     errorMessage.value = error.response?.data?.message || 'Something went wrong. Please try again.';
   } finally {
     isSigningUp.value = false;

@@ -119,6 +119,8 @@ import { useRoute } from 'vue-router';
 import { getEvent, registerForEvent, unregisterForEvent, getMyUpcomingEvents} from '@/api/events'; // Assuming you have an API function to fetch event details
 import maplibregl from 'maplibre-gl'
 import * as toGeoJSON from '@tmcw/togeojson'
+import { usePosthog } from '@/composables/usePosthog';
+import  {getLoggedInUser} from '@/api/auth'
 
 
 const showSurveyModal = ref(false);
@@ -129,6 +131,9 @@ const myEvents = ref([]);
 const currentYear = new Date().getFullYear();
 const eventId = router.params.id;
 const ASSETS_URL = import.meta.env.VITE_ASSETS_URL
+const posthog = usePosthog();
+const loggedInUser = ref(null);
+
 
 const mapContainer = ref(null)
 let map
@@ -147,6 +152,12 @@ return new Intl.DateTimeFormat('en-US', {
 // Register for the event function (dummy function for now)
 const register = async () => {
     await registerForEvent(eventId)
+    posthog.capture({
+    event: 'User registered for event', 
+    distinctId: loggedInUser.value.id,
+    properties: {
+        eventId: eventId,
+    }});
 
     const hasSeenSurvey = localStorage.getItem('seenSurveyModal');
 
@@ -160,6 +171,12 @@ const register = async () => {
 const unregister = async () => {
     await unregisterForEvent(eventId)
     myEvents.value = myEvents.value.filter(myEvent => myEvent.id !== eventId);
+    posthog.capture({
+    event: 'User unregistered for event', 
+    distinctId: loggedInUser.value.id,
+    properties: {
+        eventId: eventId,
+    }});
 };
 
 const closeSurveyModal = () => {
@@ -331,6 +348,7 @@ onMounted(async () => {
     event.value = response.data
     const myEventsResponse = await getMyUpcomingEvents();
     myEvents.value = myEventsResponse.data.docs
+    loggedInUser.value = await getLoggedInUser();
 
     map = new maplibregl.Map({
     container: mapContainer.value,

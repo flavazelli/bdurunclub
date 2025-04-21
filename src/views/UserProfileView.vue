@@ -131,9 +131,10 @@
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { logout, getLoggedInUser, updateUser } from '@/api/auth'; 
+import { usePosthog } from '@/composables/usePosthog';
 
 const currentYear = new Date().getFullYear();
-
+const posthog = usePosthog();
 // Profile Data
 const level = ref('Beginner');
 const isResident = ref(false);
@@ -167,7 +168,12 @@ const updateProfile =  async () => {
   });
 
   message.value = { text: 'Profile updated successfully!', success: true };
-
+  posthog.capture({
+    event: 'User updated their profile', 
+    distinctId: userId.value,
+    properties: {
+        email: email,
+    }});
 };
 
 // Function to handle logout

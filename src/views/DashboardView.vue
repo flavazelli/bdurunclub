@@ -110,6 +110,7 @@ import { stringify } from 'qs-esm';
 import { getEvents, getMyUpcomingEvents, unregisterForEvent} from '@/api/events';
 
 
+
 const currentYear = new Date().getFullYear();
 
 const totalRuns = ref(12); // Placeholder for total runs completed
