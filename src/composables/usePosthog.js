@@ -1,6 +1,12 @@
-import { getCurrentInstance } from 'vue'
+// src/composables/usePostHog.js
+import posthog from 'posthog-js'
 
-export function usePosthog() {
-  const { appContext } = getCurrentInstance()
-  return appContext.config.globalProperties.$posthog
+export function usePostHog() {
+posthog.init(import.meta.env.VITE_POSTHOG_API_KEY, {
+    api_host: 'https://us.i.posthog.com'
+})
+
+  return {
+    posthog
+  }
 }

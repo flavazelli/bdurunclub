@@ -119,7 +119,7 @@ import { useRoute } from 'vue-router';
 import { getEvent, registerForEvent, unregisterForEvent, getMyUpcomingEvents} from '@/api/events'; // Assuming you have an API function to fetch event details
 import maplibregl from 'maplibre-gl'
 import * as toGeoJSON from '@tmcw/togeojson'
-import { usePosthog } from '@/composables/usePosthog';
+import { usePostHog } from '@/composables/usePosthog';
 import  {getLoggedInUser} from '@/api/auth'
 
 
@@ -131,7 +131,7 @@ const myEvents = ref([]);
 const currentYear = new Date().getFullYear();
 const eventId = router.params.id;
 const ASSETS_URL = import.meta.env.VITE_ASSETS_URL
-const posthog = usePosthog();
+const { posthog } = usePostHog()
 const loggedInUser = ref(null);
 
 

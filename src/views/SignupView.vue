@@ -69,12 +69,10 @@
 
 <script setup>
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
 import { signup } from '../api/auth.js'; 
-import { usePosthog } from '@/composables/usePosthog';
+import { usePostHog } from '@/composables/usePosthog';
 
-const router = useRouter();
-const posthog = usePosthog();
+const { posthog } = usePostHog()
 const form = ref({
   firstName: '',
   lastName: '',

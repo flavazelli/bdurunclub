@@ -69,13 +69,13 @@
 import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { login } from '@/api/auth';
-import { usePosthog } from '@/composables/usePosthog';
+import { usePostHog } from '@/composables/usePosthog';
 
 const email = ref('');
 const password = ref('');
 const router = useRouter();
 const errorMessage = ref('');
-const posthog = usePosthog()
+const { posthog } = usePostHog()
 
 const handleLogin = async () => {
   errorMessage.value = ''; // Reset error message
