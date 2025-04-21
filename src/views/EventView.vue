@@ -76,6 +76,7 @@
                 class="text-green-600 font-semibold underline transition inline-flex items-center space-x-2"
                 download
                 @mouseover="highlightRoute(index)"
+                @click="sendRouteToPostHog(file.filename)"
               >
                 <span>Route {{ index + 1 }}</span>
               </a>
@@ -178,6 +179,15 @@ const formatDate = (date) => {
   }).format(new Date(date))
 }
 
+const sendRouteToPostHog = (routeName) => {
+  posthog.capture('user downloaded route', {
+    distinctId: loggedInUser.value.id,
+    properties: {
+      routeName: routeName,
+      eventId: eventId,
+    },
+  })
+}
 // Register for the event function (dummy function for now)
 const register = async () => {
   await registerForEvent(eventId)
