@@ -14,7 +14,9 @@
       </div>
       <div class="shadow-lg p-6 rounded-xl text-center bg-green-50">
         <h2 class="text-2xl font-semibold text-green-700">Profile</h2>
-        <router-link to="/members/profile" class="text-lg text-green-600 hover:text-green-800">Go to Profile</router-link>
+        <router-link to="/members/profile" class="text-lg text-green-600 hover:text-green-800"
+          >Go to Profile</router-link
+        >
       </div>
     </section>
 
@@ -56,14 +58,13 @@
           :key="run.id"
           class="bg-white rounded-2xl shadow-md p-6 cursor-pointer hover:shadow-xl transition-all"
         >
-          <router-link
-            :to="`/events/${run.id}`"
-          >
-          <p class="block text-2xl font-semibold text-green-700" >{{ run.title }}</p>
-          <p class="text-gray-600">{{ formatDate(run.eventTime) }}</p>
-          <p class="text-gray-500 mt-2">Registered Users: {{ run.registeredUsers? run.registeredUsers.length : 0 }}</p>
+          <router-link :to="`/events/${run.id}`">
+            <p class="block text-2xl font-semibold text-green-700">{{ run.title }}</p>
+            <p class="text-gray-600">{{ formatDate(run.eventTime) }}</p>
+            <p class="text-gray-500 mt-2">
+              Registered Users: {{ run.registeredUsers ? run.registeredUsers.length : 0 }}
+            </p>
           </router-link>
-
         </div>
       </div>
     </section>
@@ -100,27 +101,23 @@
       &copy; {{ currentYear }} Baie D'Urfé Social Run Club. All rights reserved.
     </footer>
   </div>
-
-
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { stringify } from 'qs-esm';
-import { getEvents, getMyUpcomingEvents, unregisterForEvent} from '@/api/events';
+import { ref, onMounted } from 'vue'
+import { stringify } from 'qs-esm'
+import { getEvents, getMyUpcomingEvents, unregisterForEvent } from '@/api/events'
 
+const currentYear = new Date().getFullYear()
 
-
-const currentYear = new Date().getFullYear();
-
-const totalRuns = ref(12); // Placeholder for total runs completed
+const totalRuns = ref(12) // Placeholder for total runs completed
 // Placeholder upcoming runs
-const upcomingRuns = ref([]);
+const upcomingRuns = ref([])
 // Placeholder registered runs
-const registeredRuns = ref([]);
+const registeredRuns = ref([])
 // Modal state
-const showModal = ref(false);
-let runToUnregister = ref(null);
+const showModal = ref(false)
+let runToUnregister = ref(null)
 
 // Format date function
 const formatDate = (date) => {
@@ -130,58 +127,58 @@ const formatDate = (date) => {
     day: 'numeric',
     hour: 'numeric',
     minute: 'numeric',
-  }).format(new Date(date));
-};
+  }).format(new Date(date))
+}
 
 // Open unregister modal
 const openUnregisterModal = (runId) => {
-  runToUnregister.value = runId;
-  showModal.value = true;
-};
+  runToUnregister.value = runId
+  showModal.value = true
+}
 
 // Close unregister modal
 const closeModal = () => {
-  showModal.value = false;
-  runToUnregister.value = null;
-};
+  showModal.value = false
+  runToUnregister.value = null
+}
 
 // Confirm unregister
 const confirmUnregister = async () => {
   if (runToUnregister.value !== null) {
-    await unregisterForEvent(runToUnregister.value);
+    await unregisterForEvent(runToUnregister.value)
     // Remove the run from registered runs
-    registeredRuns.value = registeredRuns.value.filter(run => run.id !== runToUnregister.value);
+    registeredRuns.value = registeredRuns.value.filter((run) => run.id !== runToUnregister.value)
 
     // Optionally, you could add logic here to update the backend via API
 
-    closeModal();
+    closeModal()
   }
-};
+}
 
 onMounted(async () => {
-
   try {
     const params = {
       eventTime: {
         greater_than: new Date().toISOString(),
-      }    
-    };
-    const allEvents = await getEvents(stringify(
-      {
-        where: params, // ensure that `qs-esm` adds the `where` property, too!
-        sort: 'eventTime'
       },
-      { addQueryPrefix: true },
-    ));
+    }
+    const allEvents = await getEvents(
+      stringify(
+        {
+          where: params, // ensure that `qs-esm` adds the `where` property, too!
+          sort: 'eventTime',
+        },
+        { addQueryPrefix: true },
+      ),
+    )
 
-
-    const myEvents =  await getMyUpcomingEvents();
-    upcomingRuns.value = allEvents.data.docs;
-    registeredRuns.value = myEvents.data.docs;
+    const myEvents = await getMyUpcomingEvents()
+    upcomingRuns.value = allEvents.data.docs
+    registeredRuns.value = myEvents.data.docs
   } catch (error) {
-    console.error('Failed to fetch events:', error);
+    console.error('Failed to fetch events:', error)
   }
-});
+})
 </script>
 
 <style scoped>
