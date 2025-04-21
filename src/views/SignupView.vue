@@ -97,18 +97,14 @@ const handleSignup = async () => {
     // Make the API call to the signup function
     isSigningUp.value = true;
     await signup(firstName, lastName, email, password);
-    posthog.capture({
-        event: 'User Signed Up', 
-        properties: {
-          email: email,
-    }});
+    posthog.capture('user signed up', {
+      email: email,
+    });
     showModal.value = true;
   } catch (error) {
-    posthog.capture({
-      event: 'User Failed to Signed Up', 
-      properties: {
-        email: email,
-    }});
+    posthog.capture('user failed to sign up', {
+      email: email,
+    });
     errorMessage.value = error.response?.data?.message || 'Something went wrong. Please try again.';
   } finally {
     isSigningUp.value = false;

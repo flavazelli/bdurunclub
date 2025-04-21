@@ -152,8 +152,7 @@ return new Intl.DateTimeFormat('en-US', {
 // Register for the event function (dummy function for now)
 const register = async () => {
     await registerForEvent(eventId)
-    posthog.capture({
-    event: 'User registered for event', 
+    posthog.capture('user registered for event', {
     distinctId: loggedInUser.value.id,
     properties: {
         eventId: eventId,
@@ -171,8 +170,7 @@ const register = async () => {
 const unregister = async () => {
     await unregisterForEvent(eventId)
     myEvents.value = myEvents.value.filter(myEvent => myEvent.id !== eventId);
-    posthog.capture({
-    event: 'User unregistered for event', 
+    posthog.capture('user unregistered for event', {
     distinctId: loggedInUser.value.id,
     properties: {
         eventId: eventId,

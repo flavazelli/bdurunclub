@@ -168,9 +168,7 @@ const updateProfile =  async () => {
   });
 
   message.value = { text: 'Profile updated successfully!', success: true };
-  posthog.capture({
-    event: 'User updated their profile', 
-   });
+  posthog.capture('user updated profile')
 };
 
 // Function to handle logout
