@@ -12,11 +12,22 @@
       <div>
         <h2 class="text-2xl font-bold text-green-700 mb-4">💬 Club Ethos</h2>
         <ul class="list-disc list-inside space-y-2">
-          <li><strong>All Are Welcome:</strong> Whether you're brand new or experienced—you belong here.</li>
-          <li><strong>Casual Pace:</strong> This is a social run. Chatting pace. If there's interest in hard training, separate sessions may be added in the future.</li>
+          <li>
+            <strong>All Are Welcome:</strong> Whether you're brand new or experienced—you belong
+            here.
+          </li>
+          <li>
+            <strong>Casual Pace:</strong> This is a social run. Chatting pace. If there's interest
+            in hard training, separate sessions may be added in the future.
+          </li>
           <li><strong>No One Left Behind:</strong> We finish together. Support each other.</li>
-          <li><strong>Encourage & Include:</strong> Uplift your fellow runners. Community is the goal.</li>
-          <li><strong>We've All Been the Slowest:</strong> Show empathy. Be the runner you needed when you started.</li>
+          <li>
+            <strong>Encourage & Include:</strong> Uplift your fellow runners. Community is the goal.
+          </li>
+          <li>
+            <strong>We've All Been the Slowest:</strong> Show empathy. Be the runner you needed when
+            you started.
+          </li>
         </ul>
       </div>
 
@@ -24,8 +35,14 @@
       <div>
         <h2 class="text-2xl font-bold text-green-700 mb-4">📍 Route Formats</h2>
         <ul class="list-disc list-inside space-y-2">
-          <li><strong>Out-and-Back:</strong> Run out for half the session time, then turn around. Everyone returns around the same time.</li>
-          <li><strong>Loop Routes:</strong> Choose between a shorter loop for an easier pace and a longer loop for a quicker run. Self-organize based on how you're feeling.</li>
+          <li>
+            <strong>Out-and-Back:</strong> Run out for half the session time, then turn around.
+            Everyone returns around the same time.
+          </li>
+          <li>
+            <strong>Loop Routes:</strong> Choose between a shorter loop for an easier pace and a
+            longer loop for a quicker run. Self-organize based on how you're feeling.
+          </li>
         </ul>
       </div>
 
@@ -35,7 +52,10 @@
         <ul class="list-disc list-inside space-y-2">
           <li><strong>Arrive Early:</strong> Be ready 10 minutes before the run begins.</li>
           <li><strong>Self-Sort by Pace:</strong> Find your comfort group. Adjust as needed.</li>
-          <li><strong>Pace Group Leaders:</strong> Each group should have a friendly point person to guide and check in.</li>
+          <li>
+            <strong>Pace Group Leaders:</strong> Each group should have a friendly point person to
+            guide and check in.
+          </li>
           <li><strong>Co-Leaders for Large Groups:</strong> More runners = more support.</li>
         </ul>
       </div>
@@ -62,7 +82,9 @@
           <li><strong>Let Someone Know if Leaving Early:</strong> Don't ghost the group.</li>
           <li><strong>Cross Safely:</strong> Look both ways. Don't blindly follow others.</li>
           <li><strong>Respect Public Spaces:</strong> Share paths, be polite.</li>
-          <li><strong>Faster Runners:</strong> Loop back, give others rest, and support the leader.</li>
+          <li>
+            <strong>Faster Runners:</strong> Loop back, give others rest, and support the leader.
+          </li>
           <li><strong>Choose the Right Group:</strong> Adjust based on your pace week to week.</li>
         </ul>
       </div>
@@ -74,5 +96,3 @@
     </footer>
   </div>
 </template>
-
-  

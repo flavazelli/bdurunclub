@@ -9,18 +9,22 @@
           'w-full max-w-md p-4 mb-4 rounded-lg text-center font-medium transition-all duration-300',
           verificationStatus === 'success'
             ? 'bg-green-100 text-green-700 border border-green-300'
-            : 'bg-red-100 text-red-700 border border-red-300'
+            : 'bg-red-100 text-red-700 border border-red-300',
         ]"
       >
-        {{ verificationStatus === 'success'
-          ? 'Your email was verified! Login below.'
-          : 'There was a problem verifying your email. Please try again.' }}
+        {{
+          verificationStatus === 'success'
+            ? 'Your email was verified! Login below.'
+            : 'There was a problem verifying your email. Please try again.'
+        }}
       </div>
     </transition>
 
     <!-- Login Box -->
     <div class="w-full max-w-md sm:shadow-xl p-8 rounded-2xl sm:border border-gray-100">
-      <h2 class="text-3xl font-bold text-center text-green-600 mb-6">Login to Baie D'Urfé Social Run Club</h2>
+      <h2 class="text-3xl font-bold text-center text-green-600 mb-6">
+        Login to Baie D'Urfé Social Run Club
+      </h2>
 
       <form @submit.prevent="handleLogin" class="space-y-4">
         <div>
@@ -66,40 +70,37 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
-import { useRouter } from 'vue-router';
-import { login } from '@/api/auth';
-import { usePostHog } from '@/composables/usePosthog';
+import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
+import { login } from '@/api/auth'
+import { usePostHog } from '@/composables/usePosthog'
 
-const email = ref('');
-const password = ref('');
-const router = useRouter();
-const errorMessage = ref('');
+const email = ref('')
+const password = ref('')
+const router = useRouter()
+const errorMessage = ref('')
 const { posthog } = usePostHog()
 
 const handleLogin = async () => {
-  errorMessage.value = ''; // Reset error message
+  errorMessage.value = '' // Reset error message
   try {
-    await login(email.value, password.value);
+    await login(email.value, password.value)
     // Redirect to the referer or default to the dashboard
-    const referer = router.currentRoute.value.query?.redirectTo|| '/members/dashboard';
+    const referer = router.currentRoute.value.query?.redirectTo || '/members/dashboard'
     posthog.capture('user logged in', {
-        email: email,
-    });
-    router.push(referer);
-  } catch  (error) {
-    errorMessage.value = error.response?.data?.message || 'Something went wrong. Please try again.';
+      email: email,
+    })
+    router.push(referer)
+  } catch (error) {
+    errorMessage.value = error.response?.data?.message || 'Something went wrong. Please try again.'
     posthog.capture('user failed to login', {
-        email: email,
-    });
+      email: email,
+    })
   }
-
-};
+}
 
 const verificationStatus = computed(() => {
-  const status = router.currentRoute
-    ? router.currentRoute.value.query?.status
-    : null;
+  const status = router.currentRoute ? router.currentRoute.value.query?.status : null
 
   if (status === 'verification-success') return 'success'
   if (status === 'verification-failure') return 'failure'
