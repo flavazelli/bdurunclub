@@ -182,10 +182,8 @@ const formatDate = (date) => {
 const sendRouteToPostHog = (routeName) => {
   posthog.capture('user downloaded route', {
     distinctId: loggedInUser.value.id,
-    properties: {
-      routeName: routeName,
-      eventId: eventId,
-    },
+    routeName: routeName,
+    eventId: eventId,
   })
 }
 // Register for the event function (dummy function for now)
@@ -193,9 +191,7 @@ const register = async () => {
   await registerForEvent(eventId)
   posthog.capture('user registered for event', {
     distinctId: loggedInUser.value.id,
-    properties: {
-      eventId: eventId,
-    },
+    eventId: eventId,
   })
 
   const hasSeenSurvey = localStorage.getItem('seenSurveyModal')
@@ -212,9 +208,7 @@ const unregister = async () => {
   myEvents.value = myEvents.value.filter((myEvent) => myEvent.id !== eventId)
   posthog.capture('user unregistered for event', {
     distinctId: loggedInUser.value.id,
-    properties: {
-      eventId: eventId,
-    },
+    eventId: eventId,
   })
 }
 
