@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@globalhive/vuejs-tour':
+        specifier: ^2.3.4
+        version: 2.3.4(typescript@5.8.2)
       '@sentry/vue':
         specifier: ^9.13.0
         version: 9.13.0(vue@3.5.13(typescript@5.8.2))
@@ -646,6 +649,9 @@ packages:
   '@eslint/plugin-kit@0.2.8':
     resolution: {integrity: sha512-ZAoA40rNMPwSm+AeHpCq8STiNAwzWLJuP8Xv4CHIc9wv/PSuExjMrmjfYNj682vW0OOiZ1HKxzvjQr9XZIisQA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
+  '@globalhive/vuejs-tour@2.3.4':
+    resolution: {integrity: sha512-LqOSH+5DT+ieJ80lkr/cHYUQsoRn8joT+Zt1KJLfTMOOeYW0Qh5URARo3BTKUAYAKE1gOZyJG6dK0S1vfzHr1A==}
 
   '@hapi/hoek@9.3.0':
     resolution: {integrity: sha512-/c6rf4UJlmHlC9b5BaNvzAcFv7HZ2QHaV0D4/HNlBdvFnvQq8RI4kYdhyPCl7Xj+oWvTWQ8ujhqS53LIgAe6KQ==}
@@ -2174,6 +2180,9 @@ packages:
     resolution: {integrity: sha512-gqXddjPqQ6G40VdnI6T6yObEC+pDNvyP95wdQhkWkg7crHH3km5qP1FsOXEkzEQwnz6gz5qGTn1c2Y52wP3OyQ==}
     engines: {'0': node >=0.6.0}
 
+  jump.js@1.0.2:
+    resolution: {integrity: sha512-oUkJJ/Y4ATU5qjkXBntCZSKctbSyS3ewe2jrLaUu/cc9jsQiAn0fnTUxQnZz3mJdDdem1Q279zrD6h3n+Cgxtg==}
+
   jwt-decode@4.0.0:
     resolution: {integrity: sha512-+KJGIyHgkGuIq3IEBNftfhW/LfWhXUIY6OmyVWjliu5KH1y0fw7VQ8YndE2O4qZdMSd9SqbnC8GOcZEy0Om7sA==}
     engines: {node: '>=18'}
@@ -2383,6 +2392,9 @@ packages:
     resolution: {integrity: sha512-Ir/+ZpE9fDsNH0hQ3C68uyThDXzYcim2EqcZ8zn8Chtt1iylPT9xXJB0kPCnqzgcEGikO9RxSrh63MsmVCU7Fw==}
     engines: {node: ^18 || >=20}
     hasBin: true
+
+  nanopop@2.4.2:
+    resolution: {integrity: sha512-NzOgmMQ+elxxHeIha+OG/Pv3Oc3p4RU2aBhwWwAqDpXrdTbtRylbRLQztLy8dMMwfl6pclznBdfUhccEn9ZIzw==}
 
   natural-compare@1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
@@ -3712,6 +3724,14 @@ snapshots:
     dependencies:
       '@eslint/core': 0.13.0
       levn: 0.4.1
+
+  '@globalhive/vuejs-tour@2.3.4(typescript@5.8.2)':
+    dependencies:
+      jump.js: 1.0.2
+      nanopop: 2.4.2
+      vue: 3.5.13(typescript@5.8.2)
+    transitivePeerDependencies:
+      - typescript
 
   '@hapi/hoek@9.3.0': {}
 
@@ -5295,6 +5315,8 @@ snapshots:
       json-schema: 0.4.0
       verror: 1.10.0
 
+  jump.js@1.0.2: {}
+
   jwt-decode@4.0.0: {}
 
   kdbush@4.0.2: {}
@@ -5485,6 +5507,8 @@ snapshots:
   nanoid@3.3.11: {}
 
   nanoid@5.1.5: {}
+
+  nanopop@2.4.2: {}
 
   natural-compare@1.4.0: {}
 
