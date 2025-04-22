@@ -1,4 +1,5 @@
 <template>
+  <VTour :steps="appTourSteps" ref="vTour" highlight autoStart />
   <div class="min-h-screen bg-white text-gray-800">
     <!-- Header -->
     <header class="bg-green-600 text-white py-8 px-6 text-center">
@@ -14,14 +15,14 @@
       </div>
       <div class="shadow-lg p-6 rounded-xl text-center bg-green-50">
         <h2 class="text-2xl font-semibold text-green-700">Profile</h2>
-        <router-link to="/members/profile" class="text-lg text-green-600 hover:text-green-800"
+        <router-link to="/members/profile" class="update-profile text-lg text-green-600 hover:text-green-800"
           >Go to Profile</router-link
         >
       </div>
     </section>
 
     <!-- Your Registered Runs -->
-    <section class="bg-white py-12 px-4">
+    <section class="registered-runs bg-white py-12 px-4">
       <h2 class="text-3xl font-bold text-center mb-6 text-green-700">Your Registered Runs</h2>
       <div v-if="registeredRuns.length === 0" class="text-center text-gray-500">
         You are not registered for any upcoming runs yet.
@@ -50,13 +51,13 @@
     </section>
 
     <!-- Upcoming Runs -->
-    <section class="bg-green-100 py-12 px-4">
+    <section class="upcoming-runs bg-green-100 py-12 px-4">
       <h2 class="text-3xl font-bold text-center mb-6 text-green-700">Upcoming Runs</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <div
           v-for="run in upcomingRuns"
           :key="run.id"
-          class="bg-white rounded-2xl shadow-md p-6 cursor-pointer hover:shadow-xl transition-all"
+          class="run-card bg-white rounded-2xl shadow-md p-6 cursor-pointer hover:shadow-xl transition-all"
         >
           <router-link :to="`/events/${run.id}`">
             <p class="block text-2xl font-semibold text-green-700">{{ run.title }}</p>
@@ -107,7 +108,11 @@
 import { ref, onMounted } from 'vue'
 import { stringify } from 'qs-esm'
 import { getEvents, getMyUpcomingEvents, unregisterForEvent } from '@/api/events'
+import { appTourSteps } from '@/tours/appTour'
+import { VTour } from '@globalhive/vuejs-tour';
+import '@globalhive/vuejs-tour/dist/style.css';
 
+const vTour = ref()
 const currentYear = new Date().getFullYear()
 
 const totalRuns = ref(12) // Placeholder for total runs completed
