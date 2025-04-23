@@ -137,12 +137,12 @@ const handleSignup = async () => {
     isSigningUp.value = true
     await signup(firstName, lastName, email, password)
     posthog.capture('user signed up', {
-      email: email,
+      email: email.value,
     })
     showModal.value = true
   } catch (error) {
     posthog.capture('user failed to sign up', {
-      email: email,
+      email: email.value,
     })
     errorMessage.value = error.response?.data?.message || 'Something went wrong. Please try again.'
   } finally {

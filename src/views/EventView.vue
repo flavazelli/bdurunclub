@@ -192,6 +192,7 @@ const register = async () => {
   posthog.capture('user registered for event', {
     distinctId: loggedInUser.value.id,
     eventId: eventId,
+    eventTime: event.value.eventTime,
   })
 
   const hasSeenSurvey = localStorage.getItem('seenSurveyModal')
