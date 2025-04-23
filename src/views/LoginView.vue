@@ -88,13 +88,13 @@ const handleLogin = async () => {
     // Redirect to the referer or default to the dashboard
     const referer = router.currentRoute.value.query?.redirectTo || '/members/dashboard'
     posthog.capture('user logged in', {
-      email: email,
+      email: email.value,
     })
     router.push(referer)
   } catch (error) {
     errorMessage.value = error.response?.data?.message || "Something went wrong. Please try again. If it's your first time logging in, please check your email for verification."
     posthog.capture('user failed to login', {
-      email: email,
+      email: email.value,
     })
   }
 }
