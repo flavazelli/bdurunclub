@@ -15,7 +15,9 @@
       </div>
       <div class="shadow-lg p-6 rounded-xl text-center bg-green-50">
         <h2 class="text-2xl font-semibold text-green-700">Profile</h2>
-        <router-link to="/members/profile" class="update-profile text-lg text-green-600 hover:text-green-800"
+        <router-link
+          to="/members/profile"
+          class="update-profile text-lg text-green-600 hover:text-green-800"
           >Go to Profile</router-link
         >
       </div>
@@ -109,8 +111,8 @@ import { ref, onMounted } from 'vue'
 import { stringify } from 'qs-esm'
 import { getEvents, getMyUpcomingEvents, unregisterForEvent } from '@/api/events'
 import { appTourSteps } from '@/tours/appTour'
-import { VTour } from '@globalhive/vuejs-tour';
-import '@globalhive/vuejs-tour/dist/style.css';
+import { VTour } from '@globalhive/vuejs-tour'
+import '@globalhive/vuejs-tour/dist/style.css'
 
 const vTour = ref()
 const currentYear = new Date().getFullYear()
