@@ -20,7 +20,7 @@
           <h3 class="text-xl font-semibold text-green-700">Registered Members</h3>
           <ul class="mt-4 space-y-2">
             <li v-for="user in event.registeredUsers" :key="user.id" class="flex justify-between">
-              <span>{{ user.firstName }} {{ user.lastName}}</span>
+              <span>{{ user.firstName }} {{ user.lastName }}</span>
             </li>
           </ul>
         </div>
@@ -120,7 +120,9 @@
       @click.self="closeSurveyModal"
     >
       <div class="bg-white rounded-xl p-8 shadow-xl w-[90%] max-w-md text-center">
-        <h3 class="text-2xl font-semibold text-green-700 mb-4">You registered for your first run!</h3>
+        <h3 class="text-2xl font-semibold text-green-700 mb-4">
+          You registered for your first run!
+        </h3>
         <p class="text-gray-700 mb-6">
           Have a minute to provide feedback? Please take a minute to complete our short survey!
         </p>
@@ -327,7 +329,7 @@ const renderMap = async (map) => {
   if (allCoords.length > 0) {
     const bounds = allCoords.reduce(
       (b, coord) => b.extend(coord),
-      new maplibregl.LngLatBounds(allCoords[0], allCoords[0])
+      new maplibregl.LngLatBounds(allCoords[0], allCoords[0]),
     )
     map.fitBounds(bounds, { padding: 20 })
   }
