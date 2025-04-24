@@ -61,7 +61,7 @@
 
               <div
                 v-if="showTooltip"
-                class="absolute left-6 top-1/2 -translate-y-1/2 w-64 bg-white text-sm text-gray-700 shadow-lg border border-gray-200 rounded-lg px-4 py-2 z-50"
+                class="absolute sm:left-6 right-0 top-16 sm:top-1/2 -translate-y-1/2 w-64 bg-white text-sm text-gray-700 shadow-lg border border-gray-200 rounded-lg px-4 py-2 z-50"
               >
                 You can upload this file into your fitness watch (like Garmin) to follow the route
                 on your run.
