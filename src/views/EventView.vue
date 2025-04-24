@@ -20,7 +20,7 @@
           <h3 class="text-xl font-semibold text-green-700">Registered Members</h3>
           <ul class="mt-4 space-y-2">
             <li v-for="user in event.registeredUsers" :key="user.id" class="flex justify-between">
-              <span>{{ user.firstName }} {{ user.lastName.charAt(0) }}</span>
+              <span>{{ user.firstName }} {{ user.lastName}}</span>
             </li>
           </ul>
         </div>
