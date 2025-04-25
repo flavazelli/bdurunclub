@@ -236,7 +236,6 @@ const loadIcons = async (map) => {
 
 const renderMap = async (map) => {
   await loadIcons(map)
-
   let allCoords = []
 
   for (let i = 0; i < event.value.gpxFile.length; i++) {
@@ -323,6 +322,7 @@ const renderMap = async (map) => {
         resolve()
       }
       reader.readAsText(file)
+      
     })
   }
 
@@ -374,5 +374,6 @@ img {
 }
 img:hover {
   transform: scale(1.05);
+  
 }
 </style>
