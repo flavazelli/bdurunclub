@@ -105,12 +105,7 @@
         </div>
       </div>
     </section>
-
-    <!-- Footer -->
-    <footer class="text-center py-6 text-sm text-gray-500">
-      &copy; {{ currentYear }} Baie D'Urfé Social Run Club. All rights reserved.
-    </footer>
-
+    <BaseFooter/>
     <!-- Warning Modal -->
     <div
       v-if="showModal"
@@ -139,6 +134,7 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { logout, getLoggedInUser, updateUser } from '@/api/auth'
 import { usePostHog } from '@/composables/usePosthog'
+import BaseFooter from '@/components/BaseFooter.vue'
 
 const currentYear = new Date().getFullYear()
 const { posthog } = usePostHog()

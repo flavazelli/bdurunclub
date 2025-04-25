@@ -91,8 +91,10 @@
     </section>
 
     <!-- Footer -->
-    <footer class="text-center py-6 text-sm text-gray-500">
-      &copy; {{ new Date().getFullYear() }} Baie D'Urfé Social Run Club. All rights reserved.
-    </footer>
+    <BaseFooter/>
   </div>
 </template>
+<script setup>
+import BaseFooter from '@/components/BaseFooter.vue';
+
+</script>

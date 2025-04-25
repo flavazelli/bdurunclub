@@ -100,9 +100,7 @@
     </div>
 
     <!-- Footer -->
-    <footer class="text-center py-6 text-sm text-gray-500">
-      &copy; {{ currentYear }} Baie D'Urfé Social Run Club. All rights reserved.
-    </footer>
+    <BaseFooter/>
   </div>
 </template>
 
@@ -112,6 +110,7 @@ import { stringify } from 'qs-esm'
 import { getEvents, getMyUpcomingEvents, unregisterForEvent } from '@/api/events'
 import { appTourSteps } from '@/tours/appTour'
 import { VTour } from '@globalhive/vuejs-tour'
+import BaseFooter from '@/components/BaseFooter.vue'
 import '@globalhive/vuejs-tour/dist/style.css'
 
 const vTour = ref()

@@ -94,9 +94,7 @@
     </section>
 
     <!-- Footer -->
-    <footer class="text-center py-6 text-sm text-gray-500">
-      &copy; {{ currentYear }} Baie D'Urfé Social Run Club. All rights reserved.
-    </footer>
+    <BaseFooter/>
   </div>
 </template>
 
@@ -104,6 +102,7 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import { getEvents } from '@/api/events'
 import { stringify } from 'qs-esm'
+import BaseFooter from '@/components/BaseFooter.vue'
 
 const currentYear = new Date().getFullYear()
 const carousel = ref(null)
