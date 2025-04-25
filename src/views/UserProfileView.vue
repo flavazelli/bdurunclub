@@ -52,6 +52,17 @@
           </div>
         </div>
 
+        <p class="mt-2 text-green-700">
+          Member since:
+          {{
+            new Date(memberSince).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            })
+          }}
+        </p>
+
         <!-- Disclaimer -->
         <div class="mt-4 text-sm text-gray-500">
           <p>
@@ -77,11 +88,11 @@
             Logout
           </button>
           <!-- <button
-            @click="openDeleteModal"
-            class="bg-red-600 text-white font-semibold py-3 px-6 rounded hover:bg-red-700"
-          >
-            Delete Account
-          </button> -->
+        @click="openDeleteModal"
+        class="bg-red-600 text-white font-semibold py-3 px-6 rounded hover:bg-red-700"
+        >
+        Delete Account
+        </button> -->
         </div>
 
         <!-- Error / Success Message -->
@@ -136,6 +147,7 @@ const level = ref('Beginner')
 const isResident = ref(false)
 const pace = ref('')
 const userId = ref(null)
+const memberSince = ref(new Date())
 const router = useRouter()
 
 // Success/Error Message
@@ -198,6 +210,7 @@ onMounted(async () => {
   try {
     // Fetch user data when the component mounts
     const response = await getLoggedInUser()
+    memberSince.value = response.data.user.createdAt
     userId.value = response.data.user.id
     level.value = response.data.user.level || 'beginner'
     isResident.value = response.data.user.bduResident || false

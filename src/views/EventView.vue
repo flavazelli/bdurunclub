@@ -236,7 +236,6 @@ const loadIcons = async (map) => {
 
 const renderMap = async (map) => {
   await loadIcons(map)
-
   let allCoords = []
 
   for (let i = 0; i < event.value.gpxFile.length; i++) {
