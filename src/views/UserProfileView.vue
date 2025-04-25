@@ -105,7 +105,7 @@
         </div>
       </div>
     </section>
-    <BaseFooter/>
+    <BaseFooter />
     <!-- Warning Modal -->
     <div
       v-if="showModal"

@@ -94,7 +94,7 @@
     </section>
 
     <!-- Footer -->
-    <BaseFooter/>
+    <BaseFooter />
   </div>
 </template>
 

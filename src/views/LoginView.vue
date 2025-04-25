@@ -66,7 +66,7 @@
         <router-link to="/signup" class="text-green-600 hover:underline">Sign Up</router-link>
       </p>
     </div>
-    <BaseFooter/>
+    <BaseFooter />
   </div>
 </template>
 

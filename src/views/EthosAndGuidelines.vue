@@ -91,10 +91,9 @@
     </section>
 
     <!-- Footer -->
-    <BaseFooter/>
+    <BaseFooter />
   </div>
 </template>
 <script setup>
-import BaseFooter from '@/components/BaseFooter.vue';
-
+import BaseFooter from '@/components/BaseFooter.vue'
 </script>

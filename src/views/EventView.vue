@@ -108,7 +108,6 @@
       </div>
     </section>
 
-
     <!-- Survey Modal -->
     <div
       v-if="showSurveyModal"
@@ -142,7 +141,7 @@
     </div>
   </div>
   <!-- Footer -->
-  <BaseFooter/>
+  <BaseFooter />
 </template>
 
 <script setup>

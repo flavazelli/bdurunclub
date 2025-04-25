@@ -100,7 +100,7 @@
     </div>
 
     <!-- Footer -->
-    <BaseFooter/>
+    <BaseFooter />
   </div>
 </template>
 

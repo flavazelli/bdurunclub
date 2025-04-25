@@ -103,7 +103,7 @@
         </router-link>
       </div>
     </div>
-  <BaseFooter/>
+    <BaseFooter />
   </div>
 </template>
 
