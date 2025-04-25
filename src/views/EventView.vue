@@ -322,7 +322,6 @@ const renderMap = async (map) => {
         resolve()
       }
       reader.readAsText(file)
-      
     })
   }
 
@@ -374,6 +373,5 @@ img {
 }
 img:hover {
   transform: scale(1.05);
-  
 }
 </style>
