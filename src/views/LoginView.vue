@@ -66,6 +66,7 @@
         <router-link to="/signup" class="text-green-600 hover:underline">Sign Up</router-link>
       </p>
     </div>
+    <BaseFooter />
   </div>
 </template>
 
@@ -74,6 +75,7 @@ import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { login } from '@/api/auth'
 import { usePostHog } from '@/composables/usePosthog'
+import BaseFooter from '@/components/BaseFooter.vue'
 
 const email = ref('')
 const password = ref('')

@@ -108,11 +108,6 @@
       </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="text-center py-6 text-sm text-gray-500">
-      &copy; {{ currentYear }} Baie D'Urfé Social Run Club. All rights reserved.
-    </footer>
-
     <!-- Survey Modal -->
     <div
       v-if="showSurveyModal"
@@ -145,6 +140,8 @@
       </div>
     </div>
   </div>
+  <!-- Footer -->
+  <BaseFooter />
 </template>
 
 <script setup>
@@ -152,6 +149,7 @@ import { ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { getEvent, registerForEvent, unregisterForEvent, getMyUpcomingEvents } from '@/api/events'
 import maplibregl from 'maplibre-gl'
+import BaseFooter from '@/components/BaseFooter.vue'
 import * as toGeoJSON from '@tmcw/togeojson'
 import { usePostHog } from '@/composables/usePosthog'
 import { getLoggedInUser } from '@/api/auth'

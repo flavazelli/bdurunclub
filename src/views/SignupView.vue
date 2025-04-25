@@ -103,6 +103,7 @@
         </router-link>
       </div>
     </div>
+    <BaseFooter />
   </div>
 </template>
 
@@ -110,6 +111,7 @@
 import { ref } from 'vue'
 import { signup } from '../api/auth.js'
 import { usePostHog } from '@/composables/usePosthog'
+import BaseFooter from '@/components/BaseFooter.vue'
 
 const { posthog } = usePostHog()
 const form = ref({
