@@ -355,6 +355,15 @@ const highlightRoute = (index) => {
 onMounted(async () => {
   const response = await getEvent(eventId)
   event.value = response.data
+  posthog.setPersonPropertiesForFlags({'email': 'value'})
+
+  if (event.value.id == '68043c61453c4740fa5a21b0' || event.value.title == "New Members Clinic") {
+    if (posthog.getFeatureFlag('clinic-vs-meet-greet') === 'test') {
+      event.value = { ...event.value, title: 'New Members Meet & Greet' };
+    } else {
+      return;
+    }
+  }
   const myEventsResponse = await getMyUpcomingEvents()
   myEvents.value = myEventsResponse.data.docs
   loggedInUser.value = await getLoggedInUser()

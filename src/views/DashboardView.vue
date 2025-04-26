@@ -118,7 +118,11 @@ import { appTourSteps } from '@/tours/appTour'
 import { VTour } from '@globalhive/vuejs-tour'
 import BaseFooter from '@/components/BaseFooter.vue'
 import '@globalhive/vuejs-tour/dist/style.css'
+import { usePostHog } from '@/composables/usePosthog'
 
+const { posthog } = usePostHog()
+
+posthog.setPersonPropertiesForFlags({'email': 'value'})
 const vTour = ref()
 const currentYear = new Date().getFullYear()
 
@@ -179,6 +183,7 @@ onMounted(async () => {
         {
           where: params, // ensure that `qs-esm` adds the `where` property, too!
           sort: 'eventTime',
+
         },
         { addQueryPrefix: true },
       ),
@@ -186,6 +191,19 @@ onMounted(async () => {
 
     const myEvents = await getMyUpcomingEvents()
     upcomingRuns.value = allEvents.data.docs
+
+    for (const event of upcomingRuns.value) {
+      if (event.id == '68043c61453c4740fa5a21b0' || event.title == "New Members Clinic") {
+        if (posthog.getFeatureFlag('clinic-vs-meet-greet') === 'test') {
+          upcomingRuns.value = upcomingRuns.value.map((run) =>
+            run.id === event.id ? { ...run, title: "New Members Meet and Greet" } : run
+          )
+        } else {
+            return;
+        }
+      }
+    }
+ 
     registeredRuns.value = myEvents.data.docs
   } catch (error) {
     console.error('Failed to fetch events:', error)
