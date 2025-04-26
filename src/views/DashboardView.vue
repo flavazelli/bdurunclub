@@ -32,7 +32,7 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <div
           v-for="run in registeredRuns"
-          :key="run.id"
+            :key="'registered-' + run.id"
           class="bg-white rounded-2xl shadow-md p-6 hover:shadow-xl transition-all"
         >
           <router-link
@@ -59,16 +59,22 @@
         <div
           v-for="run in upcomingRuns"
           :key="run.id"
-          class="run-card bg-white rounded-2xl shadow-md p-6 cursor-pointer hover:shadow-xl transition-all"
-        >
-          <router-link :to="`/events/${run.id}`">
+            class="run-card bg-white rounded-2xl shadow-md p-6 cursor-pointer hover:shadow-xl transition-all relative"
+          >
+            <router-link :to="`/events/${run.id}`">
             <p class="block text-2xl font-semibold text-green-700">{{ run.title }}</p>
             <p class="text-gray-600">{{ formatDate(run.eventTime) }}</p>
             <p class="text-gray-500 mt-2">
               Registered Users: {{ run.registeredUsers ? run.registeredUsers.length : 0 }}
             </p>
-          </router-link>
-        </div>
+            </router-link>
+            <img
+            v-if="run.canceled"
+            src="@/assets/cancelled_stamp.png"
+            alt="Cancelled"
+            class="absolute top-0 left-0 w-full h-full object-cover opacity-50 pointer-events-none"
+            />
+          </div>
       </div>
     </section>
 
