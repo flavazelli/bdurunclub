@@ -8,6 +8,14 @@
 
     <!-- Event Details Section -->
     <section class="max-w-4xl mx-auto p-0 sm:p-8" v-if="event">
+       <!-- Canceled Event Banner -->
+      <div
+        v-if="event.canceled"
+        class="bg-red-600 text-white text-center py-4 px-6 rounded-lg mb-6"
+      >
+        This event has been canceled.
+      </div>
+
       <div class="bg-white sm:shadow-lg rounded-xl p-8 space-y-8">
         <!-- Event Title and Time -->
         <div>
@@ -89,7 +97,7 @@
         </div>
 
         <!-- Register Button -->
-        <div class="mt-8 text-center">
+        <div class="mt-8 text-center" v-if="!event.canceled">
           <button
             v-if="!isUserRegistered"
             @click="register"

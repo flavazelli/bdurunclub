@@ -63,7 +63,7 @@
         <div
           v-for="run in upcomingRuns"
           :key="run.id"
-          class="inline-block bg-white rounded-2xl shadow-md p-6 min-w-[300px] mx-2 border border-gray-200 transform transition-transform duration-300 hover:scale-105 overflow-hidden"
+          class="inline-block bg-white rounded-2xl shadow-md p-6 min-w-[300px] mx-2 border border-gray-200 transform transition-transform duration-300 hover:scale-105 overflow-hidden relative"
         >
           <h3
             class="text-2xl font-semibold text-green-700 truncate"
@@ -77,6 +77,12 @@
           >
             {{ formatDate(run.date) }}
           </p>
+            <img
+            v-if="run.canceled"
+            src="@/assets/cancelled_stamp.png"
+            alt="Canceled"
+            class="absolute inset-0 w-full h-full object-cover opacity-50"
+            />
         </div>
       </div>
     </section>
@@ -156,6 +162,7 @@ const fetchUpcomingRuns = async () => {
     upcomingRuns.value = events.map((event) => ({
       name: event.title,
       date: new Date(event.eventTime),
+      canceled: event.canceled,
     }))
   } catch (error) {
     console.error('Failed to fetch upcoming runs:', error)
