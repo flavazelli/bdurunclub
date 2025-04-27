@@ -37,7 +37,7 @@ jobs:
         context: .
         push: true
         tags: northamerica-northeast2-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/bdurunclub/frontend:${{ github.sha }}
-        
+    
     - id: 'auth'
       uses: 'google-github-actions/auth@v2'
       with:
@@ -49,4 +49,5 @@ jobs:
         instance_name: 'hobby-vm'
         zone: 'northamerica-northeast2-a'
         ssh_private_key: '${{ secrets.SSH_PRIVATE_KEY }}'
-        command: 'cd /opt/infra/docker-compose && docker-compose pull && docker-compose up -d'
+        script: |
+          cd /opt/infra/docker-compose && docker-compose pull && docker-compose up -d
