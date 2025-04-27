@@ -44,6 +44,6 @@ jobs:
         username: ubuntu
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
-          cd /home/ubuntu/app
+          cd /opt/infra/docker-compose
           docker-compose pull
           docker-compose up -d
