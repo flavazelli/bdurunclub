@@ -12,7 +12,6 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
- # Authenticate with GCP using Service Account Key JSON (or Workload Identity Federation)
     - name: Authenticate with GCP
       uses: google-github-actions/auth@v2
       with:
@@ -32,7 +31,7 @@ jobs:
       with:
         context: .
         push: true
-        tags: us-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/bdurunclub"
+        tags: us-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/bdurunclub/frontend:${{ github.sha }}"
         
     - name: SSH Deploy
       uses: appleboy/ssh-action@v0.1.0
