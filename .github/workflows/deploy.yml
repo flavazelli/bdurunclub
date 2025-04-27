@@ -41,7 +41,7 @@ jobs:
       uses: appleboy/ssh-action@v0.1.0
       with:
         host: ${{ secrets.VM_IP }}
-        username: ubuntu
+        username: flavazelli
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
           cd /opt/infra/docker-compose
