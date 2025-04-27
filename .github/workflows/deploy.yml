@@ -50,4 +50,6 @@ jobs:
         zone: 'northamerica-northeast2-a'
         ssh_private_key: '${{ secrets.SSH_PRIVATE_KEY }}'
         script: |
-          cd /opt/infra/docker-compose && docker-compose pull && docker-compose up -d
+          cd /opt/infra/docker-compose
+          docker-compose pull 
+          docker-compose up -d
