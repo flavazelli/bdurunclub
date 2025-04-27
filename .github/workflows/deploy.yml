@@ -26,12 +26,16 @@ jobs:
         project_id: ${{ secrets.GCP_PROJECT_ID }}
         service_account_key: ${{ secrets.GCP_SA_KEY }}
 
+    - name: Set up Docker authentication for Artifact Registry
+      run: |
+        gcloud auth configure-docker northamerica-northeast2-docker.pkg.dev
+
     - name: Build and Push Docker Image
       uses: docker/build-push-action@v5
       with:
         context: .
         push: true
-        tags: us-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/bdurunclub/frontend:${{ github.sha }}
+        tags: northamerica-northeast2-docker.pkg.dev-us-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/bdurunclub/frontend:${{ github.sha }}
         
     - name: SSH Deploy
       uses: appleboy/ssh-action@v0.1.0
