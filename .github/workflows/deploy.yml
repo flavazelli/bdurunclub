@@ -38,13 +38,15 @@ jobs:
         push: true
         tags: northamerica-northeast2-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/bdurunclub/frontend:${{ github.sha }}
         
-    - name: SSH Deploy
-      uses: appleboy/ssh-action@v0.1.0
+    - id: 'auth'
+      uses: 'google-github-actions/auth@v2'
       with:
-        host: ${{ secrets.VM_IP }}
-        username: flavazelli
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        script: |
-          cd /opt/infra/docker-compose
-          docker-compose pull
-          docker-compose up -d
+        credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+    - id: 'compute-ssh'
+      uses: 'google-github-actions/ssh-compute@v1'
+      with:
+        instance_name: 'hobby-vm'
+        zone: 'northamerica-northeast2-a'
+        ssh_private_key: '${{ secrets.SSH_PRIVATE_KEY }}'
+        command: 'cd /opt/infra/docker-compose && docker-compose pull && docker-compose up -d'
