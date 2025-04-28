@@ -198,7 +198,7 @@ onMounted(async () => {
           upcomingRuns.value = upcomingRuns.value.map((run) =>
             run.id === event.id ? { ...run, title: "New Members Meet and Greet" } : run
           )
-        } else {
+        } else if (posthog.getFeatureFlag('clinic-vs-meet-greet') === 'control'){
             return;
         }
       }

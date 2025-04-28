@@ -360,7 +360,7 @@ onMounted(async () => {
   if (event.value.id == '68043c61453c4740fa5a21b0' || event.value.title == "New Members Clinic") {
     if (posthog.getFeatureFlag('clinic-vs-meet-greet') === 'test') {
       event.value = { ...event.value, title: 'New Members Meet & Greet' };
-    } else {
+    } else if (posthog.getFeatureFlag('clinic-vs-meet-greet') === 'control') {
       return;
     }
   }
