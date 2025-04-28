@@ -23,7 +23,7 @@
     <!-- Login Box -->
     <div class="w-full max-w-md sm:shadow-xl p-8 rounded-2xl sm:border border-gray-100">
       <h2 class="text-3xl font-bold text-center text-green-600 mb-6">
-        Login to Baie D'Urfé Social Run Club
+        Login to Baie D'Urfé Run Club
       </h2>
 
       <form @submit.prevent="handleLogin" class="space-y-4">
