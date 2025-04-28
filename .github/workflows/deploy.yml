@@ -48,7 +48,7 @@ jobs:
           sudo sed -i "s|image: .*/frontend:.*|image: northamerica-northeast2-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/bdurunclub/frontend:${{ github.sha }}|" docker-compose.yml
           echo "docker-compose.yml updated successfully."
           sudo docker-compose pull
-          sudo docker-compose up -d
+          sudo docker-compose up -d frontend
     - name: 'Show Output'
       run: |-
         echo '${{ steps.ssh.outputs.stdout }}'
