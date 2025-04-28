@@ -42,12 +42,18 @@ jobs:
         instance_name: 'hobby-vm'
         zone: 'northamerica-northeast2-a'
         ssh_private_key: '${{ secrets.SSH_PRIVATE_KEY }}'
-        command: cd /opt/infra/docker-compose && sudo docker-compose pull && sudo docker-compose restart -d
+        command: |
+          cd /opt/infra/docker-compose
+          echo "Updating docker-compose.yml with the new frontend image..."
+          sudo sed -i "s|image: .*/frontend:.*|image: northamerica-northeast2-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/bdurunclub/frontend:${{ github.sha }}|" docker-compose.yml
+          echo "docker-compose.yml updated successfully."
+          sudo docker-compose pull
+          sudo docker-compose up -d
     - name: 'Show Output'
       run: |-
         echo '${{ steps.ssh.outputs.stdout }}'
         echo '${{ steps.ssh.outputs.stderr }}'
-          
-          
-          
+
+
+
 
