@@ -17,15 +17,13 @@ jobs:
       uses: google-github-actions/auth@v2
       with:
         credentials_json: ${{ secrets.GCP_SA_KEY }}  # Use Service Account Key JSON from GitHub secrets
-        # OR if using Workload Identity Federation:
-        # workload_identity_provider: "projects/123456789/locations/global/workloadIdentityPools/my-pool/providers/my-provider"
-        # service_account: "my-service-account@my-project.iam.gserviceaccount.com"
 
-    - name: Authenticate Docker with Google Cloud
-      uses: google-github-actions/setup-gcloud@v0.3.0
-      with:
-        project_id: ${{ secrets.GCP_PROJECT_ID }}
-        service_account_key: ${{ secrets.GCP_SA_KEY }}
+    - name: Pull GCP Secret and Rename to env.production
+      run: |
+        echo "Fetching env.json from GCP Secret Manager..."
+        gcloud secrets versions access latest --secret="webenv_production" > env.production.json
+        cat env.production.json| jq -r 'to_entries[] | "\(.key)=\(.value)"' > .env.production
+        echo "Secret saved as env.production"
 
     - name: Set up Docker authentication for Artifact Registry
       run: |
@@ -37,11 +35,6 @@ jobs:
         context: .
         push: true
         tags: northamerica-northeast2-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/bdurunclub/frontend:${{ github.sha }}
-    
-    - id: 'auth'
-      uses: 'google-github-actions/auth@v2'
-      with:
-        credentials_json: ${{ secrets.GCP_SA_KEY }}
 
     - id: 'compute-ssh'
       uses: 'google-github-actions/ssh-compute@v1'
@@ -49,7 +42,7 @@ jobs:
         instance_name: 'hobby-vm'
         zone: 'northamerica-northeast2-a'
         ssh_private_key: '${{ secrets.SSH_PRIVATE_KEY }}'
-        script: |
-          cd /opt/infra/docker-compose
-          docker-compose pull 
-          docker-compose up -d
+        command: cd /opt/infra/docker-compose && docker-compose pull && docker-compose restart -d
+          
+          
+          
