@@ -42,7 +42,7 @@ jobs:
         instance_name: 'hobby-vm'
         zone: 'northamerica-northeast2-a'
         ssh_private_key: '${{ secrets.SSH_PRIVATE_KEY }}'
-        command: cd /opt/infra/docker-compose && docker-compose pull && docker-compose restart -d
+        command: cd /opt/infra/docker-compose && sudo docker-compose pull && sudo docker-compose restart -d
     - name: 'Show Output'
       run: |-
         echo '${{ steps.ssh.outputs.stdout }}'
