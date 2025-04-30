@@ -26,10 +26,14 @@
     <!-- Your Registered Runs -->
     <section class="registered-runs bg-white py-12 px-4">
       <h2 class="text-3xl font-bold text-center mb-6 text-green-700">Your Registered Runs</h2>
-      <div v-if="registeredRuns.length === 0" class="text-center text-gray-500">
+      <div v-if="isRunsLoading" class="flex flex-col justify-center items-center h-40">
+        <div class="w-12 h-12 border-4 border-green-600 border-t-transparent rounded-full animate-spin"></div>
+        <p class="mt-4 text-green-700 text-lg">Loading registered runs…</p>
+      </div>
+      <div v-else-if="registeredRuns.length === 0" class="text-center text-gray-500">
         You are not registered for any upcoming runs yet.
       </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div  v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <div
           v-for="run in registeredRuns"
             :key="'registered-' + run.id"
@@ -55,28 +59,35 @@
     <!-- Upcoming Runs -->
     <section class="upcoming-runs bg-green-100 py-12 px-4">
       <h2 class="text-3xl font-bold text-center mb-6 text-green-700">Upcoming Runs</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+      <div v-if="isRunsLoading" class="flex flex-col justify-center items-center h-40">
+        <div class="w-12 h-12 border-4 border-green-600 border-t-transparent rounded-full animate-spin"></div>
+        <p class="mt-4 text-green-700 text-lg">Loading upcoming runs…</p>
+      </div>
+
+      <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <div
           v-for="run in upcomingRuns"
           :key="run.id"
-            class="run-card bg-white rounded-2xl shadow-md p-6 cursor-pointer hover:shadow-xl transition-all relative"
-          >
-            <router-link :to="`/events/${run.id}`">
+          class="run-card bg-white rounded-2xl shadow-md p-6 cursor-pointer hover:shadow-xl transition-all relative"
+        >
+          <router-link :to="`/events/${run.id}`">
             <p class="block text-2xl font-semibold text-green-700">{{ run.title }}</p>
             <p class="text-gray-600">{{ formatDate(run.eventTime) }}</p>
             <p class="text-gray-500 mt-2">
               Registered Users: {{ run.registeredUsers ? run.registeredUsers.length : 0 }}
             </p>
-            </router-link>
-            <img
+          </router-link>
+          <img
             v-if="run.canceled"
             src="@/assets/cancelled_stamp.png"
             alt="Cancelled"
             class="absolute top-0 left-0 w-full h-full object-cover opacity-50 pointer-events-none"
-            />
-          </div>
+          />
+        </div>
       </div>
     </section>
+
 
     <!-- Confirmation Modal -->
     <div
@@ -124,16 +135,16 @@ const { posthog } = usePostHog()
 
 posthog.setPersonPropertiesForFlags({'email': 'value'})
 const vTour = ref()
-const currentYear = new Date().getFullYear()
-
 const totalRuns = ref(12) // Placeholder for total runs completed
 // Placeholder upcoming runs
+const isRunsLoading = ref(true)
 const upcomingRuns = ref([])
 // Placeholder registered runs
 const registeredRuns = ref([])
 // Modal state
 const showModal = ref(false)
 let runToUnregister = ref(null)
+
 
 // Format date function
 const formatDate = (date) => {
@@ -188,6 +199,7 @@ onMounted(async () => {
         { addQueryPrefix: true },
       ),
     )
+    
 
     const myEvents = await getMyUpcomingEvents()
     upcomingRuns.value = allEvents.data.docs
@@ -207,6 +219,8 @@ onMounted(async () => {
     registeredRuns.value = myEvents.data.docs
   } catch (error) {
     console.error('Failed to fetch events:', error)
+  } finally {
+    isRunsLoading.value = false
   }
 })
 </script>
