@@ -186,7 +186,7 @@ onMounted(async () => {
   try {
     const params = {
       eventTime: {
-        greater_than: new Date().toISOString(),
+        greater_than: new Date(Date.now() - 10 * 60 * 1000).toISOString()
       },
     }
     const allEvents = await getEvents(
