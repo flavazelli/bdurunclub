@@ -24,7 +24,7 @@
         </div>
 
         <!-- Registered Users -->
-        <div>
+        <div v-if="jwt">
           <h3 class="text-xl font-semibold text-green-700">Registered Members</h3>
           <ul class="mt-4 space-y-2">
             <li v-for="user in event.registeredUsers" :key="user.id" class="flex justify-between">
@@ -45,7 +45,8 @@
           <p class="text-gray-600 mt-2">{{ event.description }}</p>
         </div>
 
-        <div class="mt-8">
+         <!-- GPX -->
+        <div class="mt-8" v-if="jwt">
           <div class="flex items-center gap-2">
             <h3 class="text-xl font-semibold text-green-700">Download Routes (GPX Files)</h3>
 
@@ -97,7 +98,7 @@
         </div>
 
         <!-- Register Button -->
-        <div class="mt-8 text-center" v-if="!event.canceled">
+        <div class="mt-8 text-center" v-if="!event.canceled && jwt">
           <button
             v-if="!isUserRegistered"
             @click="register"
@@ -161,19 +162,20 @@ import BaseFooter from '@/components/BaseFooter.vue'
 import * as toGeoJSON from '@tmcw/togeojson'
 import { usePostHog } from '@/composables/usePosthog'
 import { getLoggedInUser } from '@/api/auth'
+import Cookies from 'js-cookie'
 
 const showSurveyModal = ref(false)
 const activeRouteIndex = ref(null)
 const router = useRoute()
 const event = ref(null)
 const myEvents = ref([])
-const currentYear = new Date().getFullYear()
 const eventId = router.params.id
 const ASSETS_URL = import.meta.env.VITE_ASSETS_URL
 const { posthog } = usePostHog()
 const loggedInUser = ref(null)
 const showTooltip = ref(false)
 const mapContainer = ref(null)
+const jwt = Cookies.get('jwt') // Check if the JWT cookie is set
 let map
 
 const formatDate = (date) => {
@@ -276,7 +278,7 @@ const renderMap = async (map) => {
             paint: {
               'line-color': '#22c55e',
               'line-width': ['case', ['==', ['literal', i], ['get', 'index']], 6, 4],
-              'line-opacity': 0.4,
+              'line-opacity': !jwt ? 1 : 0.4,
             },
           })
 
@@ -346,7 +348,7 @@ const highlightRoute = (index) => {
   event.value.gpxFile.forEach((_, i) => {
     const layerId = `route-line-${i}`
     if (map.getLayer(layerId)) {
-      map.setPaintProperty(layerId, 'line-opacity', i === index ? 1 : 0.4)
+      map.setPaintProperty(layerId, 'line-opacity', i === index  ? 1 : 0.4)
       map.setPaintProperty(layerId, 'line-width', i === index ? 6 : 4)
     }
   })

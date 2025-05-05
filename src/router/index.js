@@ -3,6 +3,7 @@ import Cookies from 'js-cookie'
 import { verifyEmail } from '@/api/auth' // Import the verifyEmail function from your API module
 import { usePostHog } from '@/composables/usePosthog'
 import { jwtDecode } from 'jwt-decode'
+import { getEvent } from '@/api/events'
 
 const { posthog } = usePostHog()
 
@@ -50,7 +51,33 @@ const router = createRouter({
       path: '/events/:id',
       name: 'Event',
       component: () => import('@/views/EventView.vue'),
-      meta: { requiresAuth: true },
+      beforeEnter: async (to, from, next) => {
+        const jwt = Cookies.get('jwt')
+        const eventId = to.params.id
+    
+        try {
+          // Fetch event by ID
+          const response = await getEvent(eventId)
+          const event = await response.data
+    
+          if (event.public) {
+            // Allow public access
+            return next()
+          } else {
+            // Private event
+            if (jwt) {
+              return next() // Authenticated, allow access
+            } else {
+              return next({
+                name: 'signup',
+              })
+            }
+          }
+        } catch (error) {
+          console.error('Event access error:', error)
+          return next({ name: 'NotFound' })
+        }
+      },
     },
     {
       path: '/verify-email',
