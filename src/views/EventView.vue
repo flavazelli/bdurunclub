@@ -366,10 +366,13 @@ onMounted(async () => {
       return;
     }
   }
-  const myEventsResponse = await getMyUpcomingEvents()
-  myEvents.value = myEventsResponse.data.docs
-  loggedInUser.value = await getLoggedInUser()
 
+  if (jwt) {
+    const myEventsResponse = await getMyUpcomingEvents()
+    myEvents.value = myEventsResponse.data.docs
+    loggedInUser.value = await getLoggedInUser()
+  }
+ 
   map = new maplibregl.Map({
     container: mapContainer.value,
     style: `https://api.maptiler.com/maps/streets-v2/style.json?key=${import.meta.env.VITE_MAP_TILER_KEY}`,
