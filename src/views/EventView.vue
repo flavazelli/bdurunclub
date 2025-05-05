@@ -93,8 +93,12 @@
           </ul>
         </div>
 
-        <div class="w-full h-[500px] rounded-xl shadow-md border border-gray-200">
-          <div ref="mapContainer" class="w-full h-full" />
+        <!-- Conditional Map or Notice -->
+        <div class="w-full h-[500px] rounded-xl shadow-md border border-gray-200 mt-8">
+          <div v-if="jwt" ref="mapContainer" class="w-full h-full" />
+          <div v-else class="w-full h-full flex items-center justify-center bg-gray-100 text-gray-600 text-center p-8 rounded-xl">
+            <p class="max-w-md">Only registered members can view the event route map. Please register to access this feature.</p>
+          </div>
         </div>
 
         <!-- Register Button -->
@@ -371,19 +375,18 @@ onMounted(async () => {
     const myEventsResponse = await getMyUpcomingEvents()
     myEvents.value = myEventsResponse.data.docs
     loggedInUser.value = await getLoggedInUser()
-  }
- 
-  map = new maplibregl.Map({
-    container: mapContainer.value,
-    style: `https://api.maptiler.com/maps/streets-v2/style.json?key=${import.meta.env.VITE_MAP_TILER_KEY}`,
-    center: [-73.7, 45.4],
-    zoom: 10,
-    interactive: false,
-  })
 
-  map.on('load', async () => {
-    await renderMap(map)
-  })
+    map = new maplibregl.Map({
+      container: mapContainer.value,
+      style: `https://api.maptiler.com/maps/streets-v2/style.json?key=${import.meta.env.VITE_MAP_TILER_KEY}`,
+      center: [-73.7, 45.4],
+      zoom: 10,
+      interactive: false,
+    })
+    map.on('load', async () => {
+      await renderMap(map)
+    })
+  }
 })
 </script>
 
