@@ -93,7 +93,7 @@
       <div class="bg-white rounded-lg shadow-lg p-6 max-w-sm w-full text-center opacity-100">
         <h3 class="text-xl font-semibold text-green-600 mb-4">Check Your Email!</h3>
         <p class="text-gray-600 mb-6">
-          Please verify your email address to complete the registration process.
+          Please verify your email address by clicking the link sent to you in order to complete the registration process.
         </p>
         <router-link
           to="/login"
