@@ -79,11 +79,13 @@
           />
         </div>
         <div
-        class="inline-block bg-green-50 text-green-800 rounded-2xl shadow-inner p-6 min-w-[300px] mx-2 border border-green-200 flex flex-col justify-center items-center text-center"
-      >
-        <h3 class="text-xl font-bold mb-2">📢 Weekly Updates</h3>
-        <p class="text-sm">Weekly runs updated every Thursday evening. Check back soon!</p>
-      </div>
+          class="inline-block bg-green-50 text-green-800 rounded-2xl shadow-inner p-6 min-w-[250px] max-w-xs w-full mx-2 border border-green-200 flex flex-col justify-center items-center text-center whitespace-normal break-words transform transition-transform duration-300 hover:scale-105"
+        >
+          <h3 class="text-lg font-bold mb-2">📢 Weekly Updates</h3>
+          <p class="text-sm leading-snug">
+            Weekly runs updated every Thursday evening. Check back soon!
+          </p>
+        </div>
       </div>
     </section>
 
