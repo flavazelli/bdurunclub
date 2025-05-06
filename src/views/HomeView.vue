@@ -21,7 +21,7 @@
       <div class="shadow-lg p-6 rounded-xl text-center">
         <div class="text-green-600 text-3xl mb-2">🏃‍♀️</div>
         <h2 class="text-xl font-bold mb-2">Weekly Runs</h2>
-        <p>All levels welcome. Run with us Tuesday evenings and Saturday mornings!</p>
+        <p>All levels welcome. Run with us on weekday evenings and weekend mornings!</p>
       </div>
       <div class="shadow-lg p-6 rounded-xl text-center">
         <div class="text-green-600 text-3xl mb-2">📅</div>
