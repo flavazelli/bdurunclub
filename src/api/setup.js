@@ -40,13 +40,25 @@ apiClient.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config
 
-    // Handle unauthorized/unauthenticated errors
-    const token = Cookies.get('jwt') // Get JWT token from cookie
-    const decoded = jwtDecode(token)
+    const token = Cookies.get('jwt')
+    let decoded
+
+    try {
+      if (token) {
+        decoded = jwtDecode(token)
+      }
+    } catch (err) {
+      Cookies.remove('jwt')
+      return Promise.reject(err)
+    }
+
+    const now = Math.floor(Date.now() / 1000) // current time in seconds
+    const buffer = 60 // refresh if within 60 seconds of expiry
+
     if (
       token &&
-      decoded.exp &&
-      new Date() > new Date(decoded.exp + 60) &&
+      decoded?.exp &&
+      now > (decoded.exp - buffer) &&
       error.response &&
       error.response.status === 401 &&
       !originalRequest._retry
@@ -54,24 +66,27 @@ apiClient.interceptors.response.use(
       originalRequest._retry = true
 
       try {
-        // Refresh the token
-        const response = await axios.post(`${BASE_URL}/users/refresh-token`)
+        const response = await axios.post(
+          `${BASE_URL}/users/refresh-token`,
+          {},
+          { withCredentials: true }
+        )
 
         const newToken = response.data.refreshedToken
-        // Update the JWT cookie and expiration
-        // Set the JWT token in a cookie with the Secure flag
+
+        // Update the JWT cookie
         Cookies.set('jwt', newToken, {
           path: '/',
-          secure: process.env.NODE_ENV === 'production', // Secure only in production
-          sameSite: process.env.NODE_ENV === 'production' ? 'Strict' : 'Lax', // Strict in production, Lax otherwise
-          expires: new Date(response.data.exp * 1000), // Convert timestamp to a Date object
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: process.env.NODE_ENV === 'production' ? 'Strict' : 'Lax',
+          expires: new Date(response.data.exp * 1000), // Convert UNIX seconds to Date
         })
 
         // Retry the original request with the new token
         originalRequest.headers.Authorization = `JWT ${newToken}`
         return apiClient(originalRequest)
       } catch (refreshError) {
-        // Handle refresh token failure
+        Cookies.remove('jwt')
         return Promise.reject(refreshError)
       }
     } else if (error.response && error.response.status === 401) {
