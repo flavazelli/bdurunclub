@@ -62,7 +62,10 @@
 
       <div v-if="isRunsLoading" class="flex flex-col justify-center items-center h-40">
         <div class="w-12 h-12 border-4 border-green-600 border-t-transparent rounded-full animate-spin"></div>
-        <p class="mt-4 text-green-700 text-lg">Loading upcoming runs…</p>
+        <p class="mt-4 text-green-700 text-lg">Load ing upcoming runs…</p>
+      </div>
+      <div v-else-if="upcomingRuns.length == 0" class="flex flex-col justify-center items-center">
+        <p class="mt-4 text-green-700">No more runs are scheduled this week. Check back on Thursday evening!</p>
       </div>
 
       <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -173,11 +176,9 @@ const closeModal = () => {
 const confirmUnregister = async () => {
   if (runToUnregister.value !== null) {
     await unregisterForEvent(runToUnregister.value)
+    posthog.capture('user unregistered from event', { eventId: runToUnregister.value })
     // Remove the run from registered runs
     registeredRuns.value = registeredRuns.value.filter((run) => run.id !== runToUnregister.value)
-
-    // Optionally, you could add logic here to update the backend via API
-
     closeModal()
   }
 }
