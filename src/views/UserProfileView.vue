@@ -87,12 +87,12 @@
           >
             Logout
           </button>
-          <!-- <button
+          <button
         @click="openDeleteModal"
         class="bg-red-600 text-white font-semibold py-3 px-6 rounded hover:bg-red-700"
         >
         Delete Account
-        </button> -->
+        </button>
         </div>
 
         <!-- Error / Success Message -->
@@ -120,7 +120,7 @@
           <button @click="closeDeleteModal" class="bg-gray-300 text-black py-2 px-4 rounded mr-4">
             Cancel
           </button>
-          <button @click="deleteAccount" class="bg-red-600 text-white py-2 px-4 rounded">
+          <button @click="deleteUser" class="bg-red-600 text-white py-2 px-4 rounded">
             Delete Account
           </button>
         </div>
@@ -132,9 +132,10 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { logout, getLoggedInUser, updateUser } from '@/api/auth'
+import { logout, getLoggedInUser, updateUser, deleteAccount } from '@/api/auth'
 import { usePostHog } from '@/composables/usePosthog'
 import BaseFooter from '@/components/BaseFooter.vue'
+import Cookies from 'js-cookie'
 
 const currentYear = new Date().getFullYear()
 const { posthog } = usePostHog()
@@ -194,12 +195,15 @@ const closeDeleteModal = () => {
 }
 
 // Function to handle account deletion
-const deleteAccount = async () => {
-  // Simulate account deletion (API call should go here)
-  message.value = { text: 'Account deleted successfully!', success: true }
-  setTimeout(() => {
-    router.push('/signup') // Redirect to sign-up page after account deletion
-  }, 1000)
+const deleteUser = async () => {
+  try {
+    posthog.capture('user deleted account')
+    await deleteAccount(userId.value)
+    posthog.reset()
+  } finally {
+    Cookies.remove('jwt')
+    router.push('/')
+  }
 }
 
 onMounted(async () => {
