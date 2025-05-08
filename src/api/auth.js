@@ -71,3 +71,8 @@ export const updateUser = async (userId, userData) => {
   const response = await apiClient.patch(`/users/${userId}`, userData)
   return response
 }
+
+export const deleteAccount = async (userId) => {
+  const response = await apiClient.delete(`/users/${userId}`)
+  return response
+}
