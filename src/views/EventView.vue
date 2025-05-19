@@ -153,6 +153,28 @@
       </div>
     </div>
   </div>
+  <!-- Frank Absence Notice Modal -->
+  <div
+    v-if="showFrankNotice"
+    class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
+    @click.self="closeFrankNotice"
+  >
+    <div class="bg-white rounded-xl p-8 shadow-xl w-[90%] max-w-md text-center">
+      <h3 class="text-2xl font-semibold text-green-700 mb-4">
+        Community-Led Run This Week
+      </h3>
+      <p class="text-gray-700 mb-6">
+        Please note: This week's run will not be led by Frank. Members are encouraged to self-organize. Frank-led runs will resume the week of June 2nd.
+      </p>
+      <button
+        @click="closeFrankNotice"
+        class="bg-green-600 text-white py-2 px-6 rounded hover:bg-green-700 transition"
+      >
+        Got It
+      </button>
+    </div>
+  </div>
+
   <!-- Footer -->
   <BaseFooter />
 </template>
@@ -180,6 +202,8 @@ const loggedInUser = ref(null)
 const showTooltip = ref(false)
 const mapContainer = ref(null)
 const jwt = Cookies.get('jwt') // Check if the JWT cookie is set
+const showFrankNotice = ref(false)
+
 let map
 
 const formatDate = (date) => {
@@ -198,6 +222,10 @@ const sendRouteToPostHog = (routeName) => {
     routeName: routeName,
     eventId: eventId,
   })
+}
+
+const closeFrankNotice = () => {
+  showFrankNotice.value = false
 }
 
 const register = async () => {
@@ -386,6 +414,13 @@ onMounted(async () => {
     map.on('load', async () => {
       await renderMap(map)
     })
+
+    const eventDate = new Date(event.value?.eventTime)
+    const frankPauseStart = new Date('2025-05-19')
+    const frankResume = new Date('2025-06-02')
+    if (eventDate >= frankPauseStart && eventDate < frankResume) {
+      showFrankNotice.value = true
+    }
   }
 })
 </script>
